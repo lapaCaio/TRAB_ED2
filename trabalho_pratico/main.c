@@ -9,6 +9,11 @@
 
 int id_global = 1;
 
+typedef struct musica{
+        int codigo;
+        int vezes_selecionada;
+}Musica;
+
 //----------> ESTRUTURAS <----------//
 
 typedef struct pessoa {
@@ -22,15 +27,15 @@ typedef struct pessoa {
     char tipo;  //o tipo será calculado...
 }Pessoa;
 
-typedef struct listadepessoas {
+typedef struct nopessoa {
     Pessoa pessoa;
-    struct listadepessoas* proximo;
-    struct listadepessoas* anterior;
-}ListaDePessoas;
+    struct nopessoa* proximo;
+    struct nopessoa* anterior;
+}NoPessoa;
 
 typedef struct descritor {
-    ListaDePessoas* inicio;
-    ListaDePessoas* final;
+    NoPessoa* inicio;
+    NoPessoa* final;
     int tamanho;
 }Descritor;
 
@@ -49,40 +54,40 @@ void linha(){
 
 //----------> FUNÇÕES - TAD (PESSOA) <----------//
 
-Pessoa* le_pessoa(){
-    Pessoa* nova_pessoa = (Pessoa*)malloc(sizeof(Pessoa));
+Pessoa le_pessoa(){
+    Pessoa nova_pessoa;
 
-    nova_pessoa->id = id_global;
+    nova_pessoa.id = id_global;
     id_global++;
 
 
     lb();
     printf("\n NOME: ");
-    scanf("%[^\n]", nova_pessoa->nome);
+    scanf("%[^\n]", nova_pessoa.nome);
     lb();
     printf("\n IDADE: ");
-    scanf("%d", nova_pessoa->idade);
+    scanf("%d", nova_pessoa.idade);
     lb();
     printf("\n SEXO: ");
-    scanf("%c", &nova_pessoa->sexo);
+    scanf("%c", &nova_pessoa.sexo);
     lb();
     printf("\n MÚSICAS: ");
     printf("\n Digite o código das suas 5 músicas favoritas separadas por espaço. Ex.: 1 28 13 17 8");
     printf("\n >>> ");
-    scanf("%d %d %d %d %d", &nova_pessoa->musicas[0], &nova_pessoa->musicas[1], &nova_pessoa->musicas[2], &nova_pessoa->musicas[3], &nova_pessoa->musicas[4]);
+    scanf("%d %d %d %d %d", &nova_pessoa.musicas[0], &nova_pessoa.musicas[1], &nova_pessoa.musicas[2], &nova_pessoa.musicas[3], &nova_pessoa.musicas[4]);
     lb();
 
-    if(nova_pessoa->sexo == "M" || nova_pessoa->sexo == "m"){
-        if(nova_pessoa->idade <= 20){
-            nova_pessoa->tipo = 1; //MULHERES com MENOS que 20 anos
+    if(nova_pessoa.sexo == "M" || nova_pessoa.sexo == "m"){
+        if(nova_pessoa.idade <= 20){
+            nova_pessoa.tipo = 1; //MULHERES com MENOS que 20 anos
         }else{
-            nova_pessoa->tipo = 2;  //MULHERS com MAIS que 20 anos
+            nova_pessoa.tipo = 2;  //MULHERS com MAIS que 20 anos
         }
     }else{ 
-        if(nova_pessoa->idade <= 20){
-            nova_pessoa->tipo = 3;  //HOMENS com MENOS que 20 anos
+        if(nova_pessoa.idade <= 20){
+            nova_pessoa.tipo = 3;  //HOMENS com MENOS que 20 anos
         }else{
-            nova_pessoa->tipo = 4;  //HOMENS com MAIS que 20 anos
+            nova_pessoa.tipo = 4;  //HOMENS com MAIS que 20 anos
         }
     }
 
@@ -97,267 +102,101 @@ Pessoa* le_pessoa(){
 
 //----------> FUNÇÕES - DUPLAMENTE ENCADEADA (LISTA DE ALUNOS) <----------//
 
+void inicializa_descritor(Descritor* d){
+    d->tamanho = 0;
+    d->inicio = d->final = NULL;
+}
 
-//inicializa uma lista de pessoas
-ListaDePessoas* cria_ldp(){  //MUDAR POR CAUSA DO DESCRITOR
-    return NULL;
+void inicializa_nopessoa(NoPessoa* p){
+    p->anterior = p->proximo = NULL;
+    p->pessoa = le_pessoa();
 }
 
 //verifica se uma lista de pessoas está vázia
-int ldp_vazia(ListaDePessoas** lda){  //MUDAR POR CAUSA DO DESCRITOR
-    return (*lda == NULL);
+int lista_vazia(Descritor* d){  //MUDAR POR CAUSA DO DESCRITOR
+    return (d->inicio == d->final == NULL);
 }
 
 
 //função de buscar elemento retirada
 
+void inserir_pessoa(Descritor* d){
+    NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
 
-void inserir_aluno(ListaDePessoas** ldp){  //MUDAR POR CAUSA DO DESCRITOR
+    inicializa_nopessoa(novo_np);
 
-lt();
-
-    linha();
-
-    printf("\n INSERIR NOVO ALUNO");
-
-    linha();
-
-    printf("\n");
-
-    ListaDePessoas* novo_entrevistado = malloc(sizeof(ListaDePessoas));
-    ListaDePessoas* p;
-
-    if(novo_entrevistado){
-
-        novo_entrevistado->pessoa = *le_pessoa();
-
-        lt();
-        
-        if(*ldp == NULL){  //INSERE O PRIMEIRO ELEMENTO DA LISTA
-            
-            novo_entrevistado->proximo = novo_entrevistado->anterior = NULL;
-            *ldp = novo_entrevistado;
-
-        }
-        /*              
-        else if(strcmp(n->aluno.nome, (*ldp)->aluno.nome) < 0){  //INSERE ANTES DO PRIMEIRO ELEMENTO
-            
-            n->proximo = *ldp;
-            n->anterior = NULL;
-            (*ldp)->anterior = n;
-            *ldp = n;
-
-        }*/
-        else{  //INSERE DEPOIS DO PRIMEIRO ELEMENTO...
-
-            if(strcmp(n->aluno.nome, p->aluno.nome) < 0){ //INSERE ANTES DE P
-                
-                n->proximo = p;
-                n->anterior = p->anterior;                        
-                p->anterior->proximo = n;                        
-                p->anterior = n;
-                
-            }else{  //INSERE DEPOIS DE P
-
-                n->proximo = p->proximo;
-                n->anterior = p;
-                p->proximo = n;
-
-            }
-            
-        }
-    }else{
-
-        printf("\nOPS! ALGO DEU ERRADO AQUI, DESCULPE-NOS PELO TRANSTORNO... T-T");
-
+    if(lista_vazia(d)){  //insere na primeira posição da lista
+        d->inicio = d->final = novo_np;
+        d->tamanho++;
+    }else{  //insere nos outros locais da lista
+        d->final->proximo = novo_np;
+        novo_np->anterior = d->final;
+        d->final = novo_np;      
+        d->tamanho++;
     }
+    
 }
 
-void alterar_dados(ListaDeAlunos** lda){  //TROCAR NOMES DE VARÁVEIS AQUI
 
-    int id_buscado;
+// adaptar o shellsort...
+void shellsort(int array[], int n) {
+  int intervalo, i, j, temp;
 
-    lt();
-
-    linha();
-
-    printf("\n ALTERAR DADOS DE UM ALUNO");
-
-    linha();
-
-    id_buscado = 0;
-
-    printf("\n ID DO ALUNO: ");
-    scanf("%d", &id_buscado);
-    lb();
-
-    if(!lda_vazia(&(*lda))){
-
-        ListaDeAlunos* w;
-
-        for(w = *lda; w->proximo != NULL && w->aluno.id != id_buscado; w = w->proximo);
-
-        if(w->aluno.id == id_buscado){
-
-            lb();
-            alterarNome(&w->aluno);
-            lb();
-            alterarCurso(&w->aluno);
-            lb();
-
-        }else{
-
-            printf("\n ALUNO NÃO ENCONTRADO!");
-
-        }
-
-        ListaDeAlunos* n = malloc(sizeof(ListaDeAlunos));
-        ListaDeAlunos* p;
-
-        if(n){
-
-            n->aluno = w->aluno;
-
-            //-------> REMOÇÃO DA CÓPIA DO ALUNO DA LISTA <-----------------------------
-
-            ListaDeAlunos* z = buscar_elemento(&(*lda), id_buscado);
-
-            if(*lda == z){
-
-                *lda = z->proximo;
-
-            }else{
-
-                z->anterior->proximo = z->proximo;
-
-            }
-            if(z->proximo != NULL){
-
-                z->proximo->anterior = z->anterior;
-                free(z);
-
-            }
-
-            //-------> INSERÇÃO DO ALUNO COM DADOS TROCADOS NO LUGAR CORRETO DA LISTA <-----------------------------
-
-            if(*lda == NULL){  //INSERÇÃO EM PRIMEIRO NA LISTA ESTÁ OK
-                
-                n->proximo = n->anterior = NULL;
-                *lda = n;
-
-            }else if(strcmp(n->aluno.nome, (*lda)->aluno.nome) < 0){  //INSERÇÃO NO INÍCIO DA LISTA ESTÁ OK
-
-                n->proximo = *lda;
-                n->anterior = NULL;
-                (*lda)->anterior = n;
-                *lda = n;
-
-            }else{  //INSERÇÃO COM VÁRIOS VALORES EM ORDEM DECRESCENTE FUNCIONANDO PERFEITAMENTE... fedcba...
-
-                for(p = *lda; p->proximo != NULL && strcmp(n->aluno.nome, p->aluno.nome) > 0; p = p->proximo);
-
-                if(strcmp(n->aluno.nome, p->aluno.nome) < 0){ //se n vem antes de P
-
-                    n->proximo = p;
-                    n->anterior = p->anterior;                        
-                    p->anterior->proximo = n;                        
-                    p->anterior = n;
-
-                }else{
-
-                    n->proximo = p->proximo;
-                    n->anterior = p;
-                    p->proximo = n;
-
-                }
-            }
-
-        }else{
-
-            printf("\n ESTAMOS COM ALGUM PROBLEMA! T-T");
-            printf("\n NÃO SERÁ POSSÍVEL ADICIONAR UM ALUNO!");
-
-        }
-
-    }else{
-
-        lt();
-        printf("\n A LISTA DE ALUNOS ESTÁ VAZIA!");
-        printf("\n POR FAVOR INSIRA UM ALUNO ANTES DE TENTAR ALTERAR OS DADOS!");
-
+  // Encontra o intervalo inicial
+  intervalo = n / 2;
+  while (intervalo > 0) {
+    for (i = intervalo; i < n; i++) {
+      j = i;
+      temp = array[i];
+      while (j >= intervalo && array[j - intervalo] > temp) {
+        array[j] = array[j - intervalo];
+        j = j - intervalo;
+      }
+      array[j] = temp;
     }
+    intervalo = intervalo / 2;
+  }
 }
 
-void remover_aluno(ListaDeAlunos** lda){  //NÃO PRECISO MUDAR NADA AQUI
+void bubble_sort(int arr[], int n) {
+  for (int i = 0; i < n - 1; i++) {
+    for (int j = 0; j < n - i - 1; j++) {
+      if (arr[j] > arr[j + 1]) {
+        int temp = arr[j];
+        arr[j] = arr[j + 1];
+        arr[j + 1] = temp;
+      }
+    }
+  }
+}
 
-    int id_buscado;
-
-    lt();
-        
-    linha();
-    
-    printf("\n REMOVER UM ALUNO");
-
-    linha();
-
-    if(!lda_vazia(&(*lda))){
-
-        id_buscado = 0;
-
-        printf("\n ID DO ALUNO: ");
-        scanf("%d", &id_buscado);
-        lb();
-
-        ListaDeAlunos* p = buscar_elemento(&(*lda), id_buscado);
-
-        if (p){
-
-            if(*lda == p){ // REMOVE O PRIMEIRO ALUNO
-
-                *lda = p->proximo;
-
-            }else{ // REMOVE ULTIMO ALUNO
-
-                p->anterior->proximo = p->proximo;
-
-            }
-
-            if(p->proximo != NULL){ // REMOVE ALUNO NO MEIO
-
-                p->proximo->anterior = p->anterior;
-                
-            }
-
-        }else{
-
-            printf("\n O ALUNO NÃO ENCONTRADO! ");
-
+void imprime_musicas_populares(Descritor* d){
+    int lista[N];
+    // o código da música é o indice do vetor, o valor dentro da posição i do vetor é a quantidade de vezes que a música foi escolhida
+    //adiciona a quantidade de vezes que a música x foi escolhida (a quantidade de vezes que x foi escolhida será salva no vetor na posição x - 1)
+    for(NoPessoa* np = d->inicio; np != d->final; np = np->proximo){
+        for(int i = 0; i < 5; i++){
+            lista[*np->pessoa.musicas[i] - 1]++;
         }
+    }
 
-        free(p);
-
-        for(ListaDeAlunos* p = *lda; p != NULL; p = p->proximo){  //PERCORRE TODA A DUPLAMENTE ENCADEADA
-            
-            if(p->aluno.prox_amg){  //SE A MINHA SIMPLESMENTE ENCADEADA EXISTIR, ELA SERÁ PERCORRIDA
-
-                remove_relacao(&p->aluno.prox_amg, id_buscado); 
-
-            }else{
-
-                printf("\n QUE TRISTE, ESSE ALUNO NÃO TEM AMIGOS... T-T");
-
+    shellsort(lista, N);
+    /*
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
             }
         }
-    
-    }else{
-
-        lt();
-
-        linha();
-
-        printf("\n A LISTA DE ALUNOS ESTÁ VAZIA!");
-        printf("\n POR FAVOR INSIRA UM ALUNO ANTES DE TENTAR REMOVÊ-LO!");
-
+    }
+    */
+    printf("\n ORDEM DE POPULARIDADE:");
+    for(int i = N - 1; i > 0; i--){
+        if(lista[i] > 0){
+            printf("\n A música %d foi escolhida %d vezes.", i + 1, lista[i]);   
+        }  
     }
 }
 
@@ -396,174 +235,6 @@ void imprime_alunos(ListaDeAlunos **lda){  //NÃO PRECISO MEXER EM NADA AQUI...
     }
 }
 
-void criar_relacao(ListaDeAlunos **lda){  //NÃO PRECISO MEXER EM NADA AQUI...
-
-    int id_buscado, id_buscado_2;
-
-    lt();
-
-    linha();
-
-    printf("\n CRIAR RELAÇÃO DE AMIZADE");
-
-    linha();
-
-    if(!lda_vazia(&(*lda))){
-        
-        printf("\n ID DO PRIMEIRO ALUNO: ");
-        scanf("%d", &id_buscado);
-        lb();
-        printf("\n ID DO SEGUNDO ALUNO: ");
-        scanf("%d", &id_buscado_2);
-        lb();
-
-        ListaDeAlunos* busca_amigo_01 = buscar_elemento(&(*lda), id_buscado);  //FUNCIONANDO PERFEITAMENTE
-        ListaDeAlunos* busca_amigo_02 = buscar_elemento(&(*lda), id_buscado_2);  //FUNCIONANDO PERFEITAMENTE
-
-        insere_relacao(&busca_amigo_01->aluno.prox_amg, id_buscado_2);
-        insere_relacao(&busca_amigo_02->aluno.prox_amg, id_buscado);
-
-    }else{
-
-        lt();
-
-        printf("\n A LISTA DE ALUNOS ESTÁ VAZIA!");
-        printf("\n POR FAVOR INSIRA PELO MENOS DOIS ALUNO ANTES DE TENTAR CRIAR UMA RELAÇÃO DE AMIZADE!");
-
-    }
-}
-
-void remover_relacao(ListaDeAlunos** lda){  //NÃO PRECISO MEXER EM NADA AQUI...
-
-    int id_buscado, id_buscado_2;
-
-    lt();
-
-    linha();
-
-    printf("\n REMOVER RELAÇÃO DE AMIZADE: ");
-
-    linha();
-
-    if(!lda_vazia(&(*lda))){
-        
-        printf("\n ID DO PRIMEIRO ALUNO: ");
-        scanf("%d", &id_buscado);
-        lb();
-        printf("\n ID DO SEGUNDO ALUNO: ");
-        scanf("%d", &id_buscado_2);
-        lb();
-
-        ListaDeAlunos* busca_amigo_01 = buscar_elemento(&(*lda), id_buscado);  
-        ListaDeAlunos* busca_amigo_02 = buscar_elemento(&(*lda), id_buscado_2);
-
-        remove_relacao(&busca_amigo_01->aluno.prox_amg, id_buscado_2);
-        remove_relacao(&busca_amigo_02->aluno.prox_amg, id_buscado);
-
-    }else{
-
-        lt();
-
-        printf("\n NÃO TEM COMO ACABAR COM UMA AMIZADE SE ELA NÃO EXISTE!");
-
-    }
-}
-
-void imprimir_relacao(ListaDeAlunos** lda){  //NÃO PRECISO MUDAR NADA AQUI...
-
-    int id_buscado;
-
-    lt();
-
-    linha();
-
-    printf("\n IMPRIMIR RELAÇÕES DE AMIZADE");
-
-    linha();
-
-    id_buscado = 0;
-
-    printf("\n ID DO ALUNO: ");
-    scanf("%d", &id_buscado);  
-    lb();
-
-    ListaDeAlunos* elo_buscado = buscar_elemento(&(*lda), id_buscado); //ACHA O ALUNO BUSCADO E SALVA NA VARIÁVEL
-
-    if(elo_buscado){
-
-        ListaDeAlunos* rel_amizade;
-
-        int contador = 0;
-
-        printf("\n AMIGOS DE %s", elo_buscado->aluno.nome);
-
-        for(No* n = elo_buscado->aluno.prox_amg; n != NULL; n = n->prox){
-            if(buscar_elemento(&(*lda), n->id)){
-
-                rel_amizade = buscar_elemento(&(*lda), n->id);
-                ++contador;
-
-                printf("\n %d) %s", contador, rel_amizade->aluno.nome);
-            }else{
-                continue;
-            }
-        }
-
-        if(elo_buscado->aluno.prox_amg == NULL){
-            printf("\n QUE TRISTE! O ALUNO SELECIONADO NÃO TEM AMIGOS. T-T\n");
-        }
-    }else{
-        printf("\n O ALUNO BUSCADO NÃO FOI ENCONTRADO, ADICIONE ALGUM ALUNO ANTES DE FAZER ALGUMA BUSCA!");
-    }
-
-   
-
-}
-
-void alunos_por_curso(ListaDeAlunos** lda){  //NÃO PRECISO  MUDAR NADA AQUI...
-
-char curso_buscado[255];
-
-lt();
-
-    linha();
-
-    printf("\n IMPRIMIR ALUNOS POR CURSO");
-
-    linha();
-
-    if(!lda_vazia(&(*lda))){
-
-        printf("\n NOME DO CURSO: ");
-        scanf("%[^\n]", curso_buscado);
-        lb();
-
-        char curso;
-        int contador = 0;
-
-        for(ListaDeAlunos* p = *lda; p != NULL; p = p->proximo){
-
-            if(strcmp(curso_buscado, retornaCurso(&p->aluno)) == 0){
-
-                imprimeAluno(&p->aluno);
-                contador++;
-            }
-        }
-
-        if(contador != 0){
-            printf("\n CURSO NÃO ENCONTRADO NO SISTEMA!");
-        }
-
-    }else{
-
-        lt();
-
-        printf("\n A LISTA DE ALUNOS ESTÁ VAZIA!");
-        printf("\n POR FAVOR INSIRA PELO MENOS UM ALUNO ANTES DE TENTAR IMPRIMIR A LISTA DO CURSO!");
-
-    }
-
-}
 
 void inserir_dados_arquivo(ListaDeAlunos **lda)
 {
@@ -684,8 +355,8 @@ int main(int argc, char** argv){
     setlocale(LC_ALL, "");
 
 //-----> VARIÁVEIS PRINCIPAIS <------//
-    ListaDePessoas* ldp;
-    ldp = cria_ldp();
+    Descritor* d;
+    inicializa_descritor(d);
 
 
 //-----> VARIÁVEIS SECUNDÁRIAS <-----//
@@ -708,7 +379,7 @@ int main(int argc, char** argv){
         linha();
         printf("\n ESCOLHA A OPÇÃO DESEJADA: ");
         linha();
-        printf("\n 0 - ADICIONAR NOVO INTREVISTADO");
+        printf("\n 0 - ADICIONAR NOVO ENTREVISTADO");
         printf("\n 1 - LISTAR MÚSICAS MAIS POPULARES");
         printf("\n 2 - MÚSICAS MAIS POPULARES POR CATEGORIA");
         printf("\n 3 - SAIR");
@@ -721,7 +392,7 @@ int main(int argc, char** argv){
         {
         case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
 
-            inserir_aluno(&ldp);
+            inserir_pessoa(d);
 
             break;
 
