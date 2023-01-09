@@ -10,8 +10,8 @@
 int id_global = 1;
 
 typedef struct musica{
-        int codigo;
-        int vezes_selecionada;
+    int codigo;
+    int vezes_selecionada;
 }Musica;
 
 //----------> ESTRUTURAS <----------//
@@ -22,7 +22,7 @@ typedef struct pessoa {
     char nome[255];
     int idade;
     char sexo;
-    char* musicas[5];
+    Musica* musicas[5];
     
     char tipo;  //o tipo será calculado...
 }Pessoa;
@@ -62,21 +62,29 @@ Pessoa le_pessoa(){
 
 
     lb();
+
     printf("\n NOME: ");
     scanf("%[^\n]", nova_pessoa.nome);
     lb();
+
     printf("\n IDADE: ");
     scanf("%d", nova_pessoa.idade);
     lb();
+
     printf("\n SEXO: ");
     scanf("%c", &nova_pessoa.sexo);
     lb();
-    printf("\n MÚSICAS: ");
-    printf("\n Digite o código das suas 5 músicas favoritas separadas por espaço. Ex.: 1 28 13 17 8");
-    printf("\n >>> ");
-    scanf("%d %d %d %d %d", &nova_pessoa.musicas[0], &nova_pessoa.musicas[1], &nova_pessoa.musicas[2], &nova_pessoa.musicas[3], &nova_pessoa.musicas[4]);
-    lb();
 
+    printf("\n MÚSICAS: ");
+    for(int i = 0; i < 5; i++){
+        printf("\n Digite o código da sua %d° música. ");
+        printf("\n >>> ");
+        scanf("%d", &nova_pessoa.musicas[i]->codigo);
+        nova_pessoa.musicas[i]->codigo--;
+        nova_pessoa.musicas[i]->vezes_selecionada++;
+        lb();
+    }
+    
     if(nova_pessoa.sexo == "M" || nova_pessoa.sexo == "m"){
         if(nova_pessoa.idade <= 20){
             nova_pessoa.tipo = 1; //MULHERES com MENOS que 20 anos
@@ -90,7 +98,6 @@ Pessoa le_pessoa(){
             nova_pessoa.tipo = 4;  //HOMENS com MAIS que 20 anos
         }
     }
-
 
     return nova_pessoa;
 }
@@ -110,10 +117,13 @@ void inicializa_descritor(Descritor* d){
 void inicializa_nopessoa(NoPessoa* p){
     p->anterior = p->proximo = NULL;
     p->pessoa = le_pessoa();
+    for(int i = 0; i < 5; i++){
+        p->pessoa.musicas[i]->vezes_selecionada = 0;
+    }
 }
 
 //verifica se uma lista de pessoas está vázia
-int lista_vazia(Descritor* d){  //MUDAR POR CAUSA DO DESCRITOR
+int lista_vazia(Descritor* d){  //MUDAR POR CAUSA DO DESCRITOR?
     return (d->inicio == d->final == NULL);
 }
 
@@ -138,26 +148,6 @@ void inserir_pessoa(Descritor* d){
 }
 
 
-// adaptar o shellsort...
-void shellsort(int array[], int n) {
-  int intervalo, i, j, temp;
-
-  // Encontra o intervalo inicial
-  intervalo = n / 2;
-  while (intervalo > 0) {
-    for (i = intervalo; i < n; i++) {
-      j = i;
-      temp = array[i];
-      while (j >= intervalo && array[j - intervalo] > temp) {
-        array[j] = array[j - intervalo];
-        j = j - intervalo;
-      }
-      array[j] = temp;
-    }
-    intervalo = intervalo / 2;
-  }
-}
-
 void bubble_sort(int arr[], int n) {
   for (int i = 0; i < n - 1; i++) {
     for (int j = 0; j < n - i - 1; j++) {
@@ -171,32 +161,22 @@ void bubble_sort(int arr[], int n) {
 }
 
 void imprime_musicas_populares(Descritor* d){
-    int lista[N];
-    // o código da música é o indice do vetor, o valor dentro da posição i do vetor é a quantidade de vezes que a música foi escolhida
-    //adiciona a quantidade de vezes que a música x foi escolhida (a quantidade de vezes que x foi escolhida será salva no vetor na posição x - 1)
-    for(NoPessoa* np = d->inicio; np != d->final; np = np->proximo){
-        for(int i = 0; i < 5; i++){
-            lista[*np->pessoa.musicas[i] - 1]++;
-        }
+    Musica lista_pupulares[N];
+
+    for(int i = 0; i < N; i++){
+        lista_pupulares[i].codigo = -1;
+        lista_pupulares[i].vezes_selecionada = 0;
     }
 
-    shellsort(lista, N);
-    /*
-    for (int i = 0; i < n - 1; i++) {
-        for (int j = 0; j < n - i - 1; j++) {
-            if (arr[j] > arr[j + 1]) {
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+    int temp = 0;
+    for(NoPessoa* np = d->inicio; np != d->final; np = np->proximo){
+        for(int i = 0; i < 5; i++){
+            if(lista_pupulares[np->pessoa.musicas[i]->codigo].codigo == -1  ){
+                lista_pupulares[np->pessoa.musicas[i]->codigo] = //problema a ser resolvido aqui 
             }
+                lista_pupulares[np->pessoa.musicas[i]->codigo] = ;
         }
-    }
-    */
-    printf("\n ORDEM DE POPULARIDADE:");
-    for(int i = N - 1; i > 0; i--){
-        if(lista[i] > 0){
-            printf("\n A música %d foi escolhida %d vezes.", i + 1, lista[i]);   
-        }  
+        np->pessoa.musicas[]
     }
 }
 
