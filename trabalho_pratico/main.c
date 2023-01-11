@@ -10,9 +10,13 @@
 int id_global = 1;
 
 typedef struct musica{
+    char nome[255];
     int codigo;
     int vezes_selecionada;
 }Musica;
+
+//criar um vetor de 30 espaços com os códigos, nomes e vezes que a musica foi selecionada, inicializar tudo com zero e fodas...
+
 
 //----------> ESTRUTURAS <----------//
 
@@ -21,8 +25,8 @@ typedef struct pessoa {
 
     char nome[255];
     int idade;
-    char sexo;
-    Musica* musicas[5];
+    int sexo;
+    Musica* musicas[5];  //ALTERAR AQUI...
     
     char tipo;  //o tipo será calculado...
 }Pessoa;
@@ -68,36 +72,45 @@ Pessoa le_pessoa(){
     lb();
 
     printf("\n IDADE: ");
-    scanf("%d", nova_pessoa.idade);
+    scanf("%d", &nova_pessoa.idade);
     lb();
 
     printf("\n SEXO: ");
-    scanf("%c", &nova_pessoa.sexo);
+    printf("\n\t [0] > MASCULINO");
+    printf("\n\t [1] > FEMININO");
+    printf("\n >>> ");
+    scanf("%d", &nova_pessoa.sexo);
     lb();
-
+    
     printf("\n MÚSICAS: ");
+    printf("\n Digite o código das músicas separadas por espaço (Ex.: 12 3 22 8 7).");
+    printf("\n >>> ");
+    scanf("%d %d %d %d %d", nova_pessoa.musicas[0]->codigo, nova_pessoa.musicas[1]->codigo, nova_pessoa.musicas[2]->codigo, nova_pessoa.musicas[3]->codigo, nova_pessoa.musicas[4]->codigo);
+    /*
     for(int i = 0; i < 5; i++){
-        printf("\n Digite o código da sua %d° música. ");
-        printf("\n >>> ");
+        
         scanf("%d", &nova_pessoa.musicas[i]->codigo);
         nova_pessoa.musicas[i]->codigo--;
         nova_pessoa.musicas[i]->vezes_selecionada++;
-        lb();
-    }
-    
-    if(nova_pessoa.sexo == "M" || nova_pessoa.sexo == "m"){
+        printf("\n codigo: %d", nova_pessoa.musicas[i]->codigo);
+        printf("\n vezes selecionadas: %d", nova_pessoa.musicas[i]->vezes_selecionada);
+    }*/
+
+    /*
+    if(nova_pessoa.sexo == 1){  //o 1 representa o sexo feminino
         if(nova_pessoa.idade <= 20){
             nova_pessoa.tipo = 1; //MULHERES com MENOS que 20 anos
         }else{
             nova_pessoa.tipo = 2;  //MULHERS com MAIS que 20 anos
         }
-    }else{ 
-        if(nova_pessoa.idade <= 20){
+    }else{ //por outro lado o 0 representa o sexo masculino
+        if(nova_pessoa.sexo <= 20){
             nova_pessoa.tipo = 3;  //HOMENS com MENOS que 20 anos
         }else{
             nova_pessoa.tipo = 4;  //HOMENS com MAIS que 20 anos
         }
     }
+    */
 
     return nova_pessoa;
 }
@@ -111,12 +124,13 @@ Pessoa le_pessoa(){
 
 void inicializa_descritor(Descritor* d){
     d->tamanho = 0;
-    d->inicio = d->final = NULL;
+    d->inicio = d->final = NULL; 
 }
 
-void inicializa_nopessoa(NoPessoa* p){
+NoPessoa* inicializa_nopessoa(NoPessoa* p){
     p->anterior = p->proximo = NULL;
     p->pessoa = le_pessoa();
+   
     for(int i = 0; i < 5; i++){
         p->pessoa.musicas[i]->vezes_selecionada = 0;
     }
@@ -124,7 +138,7 @@ void inicializa_nopessoa(NoPessoa* p){
 
 //verifica se uma lista de pessoas está vázia
 int lista_vazia(Descritor* d){  //MUDAR POR CAUSA DO DESCRITOR?
-    return (d->inicio == d->final == NULL);
+    return (d->inicio == NULL && d->final == NULL);
 }
 
 
@@ -147,75 +161,27 @@ void inserir_pessoa(Descritor* d){
     
 }
 
-
-void bubble_sort(int arr[], int n) {
-  for (int i = 0; i < n - 1; i++) {
-    for (int j = 0; j < n - i - 1; j++) {
-      if (arr[j] > arr[j + 1]) {
-        int temp = arr[j];
-        arr[j] = arr[j + 1];
-        arr[j + 1] = temp;
-      }
-    }
-  }
-}
-
-void imprime_musicas_populares(Descritor* d){
-    Musica lista_pupulares[N];
-
-    for(int i = 0; i < N; i++){
-        lista_pupulares[i].codigo = -1;
-        lista_pupulares[i].vezes_selecionada = 0;
-    }
-
-    int temp = 0;
-    for(NoPessoa* np = d->inicio; np != d->final; np = np->proximo){
-        for(int i = 0; i < 5; i++){
-            if(lista_pupulares[np->pessoa.musicas[i]->codigo].codigo == -1  ){
-                lista_pupulares[np->pessoa.musicas[i]->codigo] = //problema a ser resolvido aqui 
+void imprime_geral(Descritor* d){
+    if(!lista_vazia(d)){
+        for(NoPessoa* np = d->inicio; np != d->final; np = np->proximo){
+            printf("\n ID: %d", np->pessoa.id);
+            printf("\n NOME: %s", np->pessoa.nome);
+            printf("\n SEXO: %c", np->pessoa.sexo);
+            printf("\n IDADE: %d", np->pessoa.idade);
+            printf("\n TIPO: %d", np->pessoa.tipo);
+            printf("\n MÚSICAS: ");
+            
+            for(int i = 0; i < 5; i++){
+                printf("\n\tCod.: %d", np->pessoa.musicas[i]->codigo);
+                printf("\n\tVezes selecionada: %d", np->pessoa.musicas[i]->vezes_selecionada);
             }
-                lista_pupulares[np->pessoa.musicas[i]->codigo] = ;
         }
-        np->pessoa.musicas[]
-    }
-}
-
-
-void imprime_alunos(ListaDeAlunos **lda){  //NÃO PRECISO MEXER EM NADA AQUI...
-
-    lt();
-
-    linha();
-
-    printf("\n LISTA DE ALUNOS");
-
-    linha();
-
-    if(!lda_vazia(&(*lda))){
-
-        printf("\n");
-
-        for(ListaDeAlunos* p = *lda; p != NULL; p = p->proximo){
-
-            imprimeAluno(&p->aluno);
-
-        }
-        
-        printf("\n");
-
     }else{
-
-        lt();
-
-        linha();
-
-        printf("\n A LISTA DE ALUNOS ESTÁ VAZIA!");
-        printf("\n POR FAVOR INSIRA UM ALUNO NA LISTA ANTES DE TENTAR IMPRIMI-LA!");
-
+        printf("\n A LISTA DE ENTREVISTADOS ESTÁ VAZIA! POR FAVOR INSIRA ALGUM PARA QUE POSSAMOS MOSTRA-LO AQUI!");
     }
 }
 
-
+/*
 void inserir_dados_arquivo(ListaDeAlunos **lda)
 {
 
@@ -330,14 +296,16 @@ void salvar_dados_arquivo(ListaDeAlunos **lda)
 
     fclose(arquivo_txt);
 }
+*/
 
 int main(int argc, char** argv){
     setlocale(LC_ALL, "");
 
 //-----> VARIÁVEIS PRINCIPAIS <------//
-    Descritor* d;
-    inicializa_descritor(d);
+    Descritor* d = (Descritor*)malloc(sizeof(Descritor));
 
+    inicializa_descritor(d);
+    printf("\n tudo certo aqui!");
 
 //-----> VARIÁVEIS SECUNDÁRIAS <-----//
 
@@ -348,7 +316,7 @@ int main(int argc, char** argv){
     //int id_buscado, id_buscado_2;
     //char curso_buscado[255];
 
-    inserir_dados_arquivo(&ldp);
+    //inserir_dados_arquivo(&ldp);
 
 
 
@@ -378,19 +346,24 @@ int main(int argc, char** argv){
 
         case 1:  //ALTERA OS DADOS DE UM ALUNO
             
-            alterar_dados(&ldp);
+            //alterar_dados(&ldp);
+            printf("\n OPÇÃO NÚMERO 1 SELECIONADA!");
 
             break;
 
         case 2:  //REMOVE OS DADOS DE UM ALUNO
                 
-            remover_aluno(&ldp);
+            //remover_aluno(&ldp);
+            
+            printf("\n OPÇÃO NÚMERO 2 SELECIONADA!");
 
             break;
             
         case 3:  //IMPRIME A LISTA DOS ALUNOS NA TELA
 
-            imprime_alunos(&ldp);
+            //imprime_alunos(&ldp);
+            
+            printf("\n OPÇÃO NÚMERO 3 SELECIONADA!");
 
             break;
 
@@ -398,7 +371,9 @@ int main(int argc, char** argv){
 
             lt();
 
-            salvar_dados_arquivo(&ldp);
+            //salvar_dados_arquivo(&ldp);
+            
+            printf("\n OPÇÃO NÚMERO 4 SELECIONADA!");
 
             linha();
 
