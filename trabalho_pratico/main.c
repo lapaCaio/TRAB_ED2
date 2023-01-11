@@ -26,7 +26,7 @@ typedef struct pessoa {
     char nome[255];
     int idade;
     int sexo;
-    Musica* musicas[5];  //ALTERAR AQUI...
+    int musicas[5];  //ALTERAR AQUI...
     
     char tipo;  //o tipo será calculado...
 }Pessoa;
@@ -85,7 +85,11 @@ Pessoa le_pessoa(){
     printf("\n MÚSICAS: ");
     printf("\n Digite o código das músicas separadas por espaço (Ex.: 12 3 22 8 7).");
     printf("\n >>> ");
-    scanf("%d %d %d %d %d", nova_pessoa.musicas[0]->codigo, nova_pessoa.musicas[1]->codigo, nova_pessoa.musicas[2]->codigo, nova_pessoa.musicas[3]->codigo, nova_pessoa.musicas[4]->codigo);
+    scanf("%d %d %d %d %d", &nova_pessoa.musicas[0], &
+    nova_pessoa.musicas[1], &
+    nova_pessoa.musicas[2], &
+    nova_pessoa.musicas[3], &
+    nova_pessoa.musicas[4]);
     /*
     for(int i = 0; i < 5; i++){
         
@@ -96,7 +100,7 @@ Pessoa le_pessoa(){
         printf("\n vezes selecionadas: %d", nova_pessoa.musicas[i]->vezes_selecionada);
     }*/
 
-    /*
+    
     if(nova_pessoa.sexo == 1){  //o 1 representa o sexo feminino
         if(nova_pessoa.idade <= 20){
             nova_pessoa.tipo = 1; //MULHERES com MENOS que 20 anos
@@ -110,15 +114,9 @@ Pessoa le_pessoa(){
             nova_pessoa.tipo = 4;  //HOMENS com MAIS que 20 anos
         }
     }
-    */
 
     return nova_pessoa;
 }
-
-//função de alterar o nome retirada
-//função de alterar curso retirada
-//função de pegar curso retirada
-//função de imprimir curso retirada
 
 //----------> FUNÇÕES - DUPLAMENTE ENCADEADA (LISTA DE ALUNOS) <----------//
 
@@ -130,10 +128,6 @@ void inicializa_descritor(Descritor* d){
 NoPessoa* inicializa_nopessoa(NoPessoa* p){
     p->anterior = p->proximo = NULL;
     p->pessoa = le_pessoa();
-   
-    for(int i = 0; i < 5; i++){
-        p->pessoa.musicas[i]->vezes_selecionada = 0;
-    }
 }
 
 //verifica se uma lista de pessoas está vázia
@@ -146,7 +140,6 @@ int lista_vazia(Descritor* d){  //MUDAR POR CAUSA DO DESCRITOR?
 
 void inserir_pessoa(Descritor* d){
     NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
-
     inicializa_nopessoa(novo_np);
 
     if(lista_vazia(d)){  //insere na primeira posição da lista
@@ -163,17 +156,20 @@ void inserir_pessoa(Descritor* d){
 
 void imprime_geral(Descritor* d){
     if(!lista_vazia(d)){
-        for(NoPessoa* np = d->inicio; np != d->final; np = np->proximo){
+        for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
             printf("\n ID: %d", np->pessoa.id);
             printf("\n NOME: %s", np->pessoa.nome);
-            printf("\n SEXO: %c", np->pessoa.sexo);
-            printf("\n IDADE: %d", np->pessoa.idade);
+
+            if(np->pessoa.sexo == 0){
+                printf("\n SEXO: Masculino");
+            }else{
+                printf("\n SEXO: Feminino");
+            }
             printf("\n TIPO: %d", np->pessoa.tipo);
-            printf("\n MÚSICAS: ");
-            
+            printf("\n MÚSICAS: ");  
             for(int i = 0; i < 5; i++){
-                printf("\n\tCod.: %d", np->pessoa.musicas[i]->codigo);
-                printf("\n\tVezes selecionada: %d", np->pessoa.musicas[i]->vezes_selecionada);
+                printf("\n\tCod.: %d", np->pessoa.musicas[i]);
+                //printf("\n\tVezes selecionada: %d", np->pessoa.musicas[i]->vezes_selecionada);
             }
         }
     }else{
@@ -303,9 +299,7 @@ int main(int argc, char** argv){
 
 //-----> VARIÁVEIS PRINCIPAIS <------//
     Descritor* d = (Descritor*)malloc(sizeof(Descritor));
-
     inicializa_descritor(d);
-    printf("\n tudo certo aqui!");
 
 //-----> VARIÁVEIS SECUNDÁRIAS <-----//
 
@@ -340,6 +334,7 @@ int main(int argc, char** argv){
         {
         case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
 
+            printf("\n OPÇÃO NÚMERO 0 SELECIONADA!");
             inserir_pessoa(d);
 
             break;
@@ -348,6 +343,7 @@ int main(int argc, char** argv){
             
             //alterar_dados(&ldp);
             printf("\n OPÇÃO NÚMERO 1 SELECIONADA!");
+            imprime_geral(d);
 
             break;
 
@@ -359,21 +355,13 @@ int main(int argc, char** argv){
 
             break;
             
-        case 3:  //IMPRIME A LISTA DOS ALUNOS NA TELA
-
-            //imprime_alunos(&ldp);
-            
-            printf("\n OPÇÃO NÚMERO 3 SELECIONADA!");
-
-            break;
-
-        case 4:
+        case 3:
 
             lt();
 
             //salvar_dados_arquivo(&ldp);
             
-            printf("\n OPÇÃO NÚMERO 4 SELECIONADA!");
+            printf("\n PROGRAMA ENCERRADO!");
 
             linha();
 
