@@ -10,10 +10,11 @@
 int id_global = 1;
 
 typedef struct musica{
-    char nome[255];
-    int codigo;
-    int vezes_selecionada;
-}Musica;
+    int id;
+    char nome[30];
+    char autor[30];
+    int vezes_selecionadas;
+}Musicas;
 
 //criar um vetor de 30 espaços com os códigos, nomes e vezes que a musica foi selecionada, inicializar tudo com zero e fodas...
 
@@ -58,7 +59,7 @@ void linha(){
 
 //----------> FUNÇÕES - TAD (PESSOA) <----------//
 
-Pessoa le_pessoa(){
+Pessoa le_pessoa(Musicas* m){
     Pessoa nova_pessoa;
 
     nova_pessoa.id = id_global;
@@ -90,15 +91,8 @@ Pessoa le_pessoa(){
     nova_pessoa.musicas[2], &
     nova_pessoa.musicas[3], &
     nova_pessoa.musicas[4]);
-    /*
-    for(int i = 0; i < 5; i++){
-        
-        scanf("%d", &nova_pessoa.musicas[i]->codigo);
-        nova_pessoa.musicas[i]->codigo--;
-        nova_pessoa.musicas[i]->vezes_selecionada++;
-        printf("\n codigo: %d", nova_pessoa.musicas[i]->codigo);
-        printf("\n vezes selecionadas: %d", nova_pessoa.musicas[i]->vezes_selecionada);
-    }*/
+
+
 
     
     if(nova_pessoa.sexo == 1){  //o 1 representa o sexo feminino
@@ -125,7 +119,7 @@ void inicializa_descritor(Descritor* d){
     d->inicio = d->final = NULL; 
 }
 
-NoPessoa* inicializa_nopessoa(NoPessoa* p){
+void inicializa_nopessoa(NoPessoa* p){
     p->anterior = p->proximo = NULL;
     p->pessoa = le_pessoa();
 }
@@ -151,7 +145,6 @@ void inserir_pessoa(Descritor* d){
         d->final = novo_np;      
         d->tamanho++;
     }
-    
 }
 
 void imprime_geral(Descritor* d){
@@ -177,122 +170,19 @@ void imprime_geral(Descritor* d){
     }
 }
 
-/*
-void inserir_dados_arquivo(ListaDeAlunos **lda)
-{
+void listar_populares(Descritor* d, Musicas* m){
 
-    // lt();
-
-    printf("\n");
-
-    FILE *arquivo_txt = fopen("entradas.txt", "r");
-    rewind(arquivo_txt);
-
-    Aluno *aluno_novo = (Aluno *)malloc(sizeof(Aluno));
-
-    while (fscanf(arquivo_txt, "%[^\t]\t%d\t%[^\n]\n\t", aluno_novo->nome, &aluno_novo->id, aluno_novo->curso) != EOF)
-    {
-
-        atualiza_id_global(aluno_novo->id);
-
-        aluno_novo->prox_amg = NULL;
-
-        ListaDeAlunos *n = malloc(sizeof(ListaDeAlunos));
-        ListaDeAlunos *p;
-
-        int id_temp;
-
-        while (fscanf(arquivo_txt, "%d ", &id_temp) == 1)
-        {
-            No *novo_amigo = malloc(sizeof(No));
-
-            novo_amigo->id = id_temp;
-            novo_amigo->prox = aluno_novo->prox_amg;
-            aluno_novo->prox_amg = novo_amigo;
-        }
-
-        if (n)
-        {
-
-            n->aluno = *aluno_novo;
-
-            // lt();
-
-            if (*lda == NULL)
-            { // INSERÇÃO EM PRIMEIRO NA LISTA
-
-                n->proximo = n->anterior = NULL;
-                *lda = n;
-            }
-            else if (strcmp(n->aluno.nome, (*lda)->aluno.nome) < 0)
-            { // INSERÇÃO NO INÍCIO DA LISTA
-
-                n->proximo = *lda;
-                n->anterior = NULL;
-                (*lda)->anterior = n;
-                *lda = n;
-            }
-            else
-            { // INSERÇÃO COM VÁRIOS VALORES EM ORDEM DECRESCENTE
-
-                for (p = *lda; p->proximo != NULL && strcmp(n->aluno.nome, p->aluno.nome) > 0; p = p->proximo)
-                    ;
-
-                if (strcmp(n->aluno.nome, p->aluno.nome) < 0)
-                {
-
-                    n->proximo = p;
-                    n->anterior = p->anterior;
-                    p->anterior->proximo = n;
-                    p->anterior = n;
-                }
-                else
-                {
-
-                    n->proximo = p->proximo;
-                    n->anterior = p;
-                    p->proximo = n;
+    
+    for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){  //percorre a lista de pessoas 
+        for(int i = 0; i < 5; i++){  //dentro de cada pessoa, percorre os 5 id's ecolhidos
+            for(int j = 0; j < N; j++){  //percorre dentro da lista de musicas de tamanho 30
+                if(m[j].id == np->pessoa.musicas[i]){  //encontra a posição correspondente ao id de cada musica da pessoa
+                    m[j].vezes_selecionadas++;  //adicionda a vez que a música foi selecionada
                 }
             }
         }
-        else
-        {
-
-            printf("\nOPS! ALGO DEU ERRADO AQUI, DESCULPE-NOS PELO TRANSTORNO... T-T");
-        }
     }
-
-    fclose(arquivo_txt);
 }
-
-
-void salvar_dados_arquivo(ListaDeAlunos **lda)
-{
-
-    lt();
-
-    linha();
-
-    printf("\n");
-
-    FILE *arquivo_txt = fopen("entradas.txt", "w");
-
-    for (ListaDeAlunos *p = *lda; p != NULL; p = p->proximo)
-    {
-
-        fprintf(arquivo_txt, "%s\t%d\t%s\n\t", p->aluno.nome, p->aluno.id, p->aluno.curso);
-
-        for (No *n = p->aluno.prox_amg; n != NULL; n = n->prox)
-        {
-            fprintf(arquivo_txt, "%d ", n->id);
-        }
-
-        fprintf(arquivo_txt, "\n");
-    }
-
-    fclose(arquivo_txt);
-}
-*/
 
 int main(int argc, char** argv){
     setlocale(LC_ALL, "");
@@ -300,6 +190,8 @@ int main(int argc, char** argv){
 //-----> VARIÁVEIS PRINCIPAIS <------//
     Descritor* d = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(d);
+
+    Musicas m[N];
 
 //-----> VARIÁVEIS SECUNDÁRIAS <-----//
 
