@@ -1,31 +1,30 @@
-1	nome_da_musica	autor	0
-	2	nome_da_musica	autor	0
-	3	nome_da_musica	autor	0
-	4	nome_da_musica	autor	0
-	5	nome_da_musica	autor	0
-	6	nome_da_musica	autor	0
-	7	nome_da_musica	autor	0
-	8	nome_da_musica	autor	0
-	9	nome_da_musica	autor	0
-	10	nome_da_musica	autor	0
-	11	nome_da_musica	autor	0
-	12	nome_da_musica	autor	0
-	13	nome_da_musica	autor	0
-	14	nome_da_musica	autor	0
-	15	nome_da_musica	autor	0
-	16	nome_da_musica	autor	0
-	17	nome_da_musica	autor	0
-	18	nome_da_musica	autor	0
-	19	nome_da_musica	autor	0
-	20	nome_da_musica	autor	0
-	21	nome_da_musica	autor	0
-	22	nome_da_musica	autor	0
-	23	nome_da_musica	autor	0
-	24	nome_da_musica	autor	0
-	25	nome_da_musica	autor	0
-	26	nome_da_musica	autor	0
-	27	nome_da_musica	autor	0
-	28	nome_da_musica	autor	0
-	29	nome_da_musica	autor	0
-	30	nome_da_musica	autor	0
-	
+1	Master Of Puppets	Metallica	1
+2	Maura	Manoel Gomes	0
+3	Paint It Black	The Rolling Stones	0
+4	Shape Of My Heart	Sting	0
+5	Bohemian Rhapsody	Queen	1
+6	The Real Slim Shady	Eminem	0
+7	Garçon	Reginaldo Rossi	1
+8	Dream On	Aerosmith	0
+9	505	Arctic Monkeys	0
+10	House Of Memories	Panic! At The Disco	1
+11	Aint No Rest For The Wicked	Cage The Elephant	0
+12	House Of The Rising Sun	The Animals	0
+13	Decida	Milionário e José Rico	1
+14	Milu	Gusttavo Lima	0
+15	Amor Hospitalar	Luckhaos	1
+16	Riptide	Vance Joy	0
+17	Sunflower	Rex Orange County	0
+18	Robocop Gay	Mamonas Assassinas	1
+19	Nothing Else Matters	Apocalyptica	0
+20	Sakura	Young Lixo	0
+21	Eu Kimetsu No Seu Rayba	MC Maha	0
+22	Trepada Em Cuiabá	Leno Brega	1
+23	Nave Espacial	Samantha Machado	0
+24	Big Weenie	Eminem	0
+25	2345MEIA78	Gabriel Pensador	1
+26	Coração De Gelo	WIU	0
+27	Piseiro Do Rock Lee	MC Maha	0
+28	Menina Veneno	Ritchie	0
+29	Boate Azul	Cachorrão Do Brega	0
+30	Take What You Want	Post Malone	1
