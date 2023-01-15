@@ -19,9 +19,3 @@ diminuição de incremento (Shellsort).
 
 Obs: No programa deverá ser implementado também uma módulo que grave no arquivo os
 resultados da pesquisa.
-
-MUDANÇAS FEITAS ATÉ LINHA 113 E A PARTIR DA 569(inicio da main);
-
-
-OBJETIVOS:
-1. salvar e pegar dados de arquivo externo

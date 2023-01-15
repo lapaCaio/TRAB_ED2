@@ -37,13 +37,17 @@ Pessoa le_pessoa(Musicas* m){
     Pessoa nova_pessoa;
 
     nova_pessoa.id = id_global;
-    id_global++;
+    atualiza_id_global();
 
 
     lb();
 
     printf("\n NOME: ");
     scanf("%[^\n]", nova_pessoa.nome);
+    lb();
+
+    printf("\n SOBRENOME: ");
+    scanf("%[^\n]", nova_pessoa.sobrenome);
     lb();
 
     printf("\n IDADE: ");
@@ -57,10 +61,13 @@ Pessoa le_pessoa(Musicas* m){
     scanf("%d", &nova_pessoa.sexo);
     lb();
     
-    printf("\n MÚSICAS: ");
+    linha();
+    listar_musicas(m);
+    linha();
     printf("\n Digite o código das músicas separadas por espaço (Ex.: 12 3 22 8 7).");
     printf("\n >>> ");
-    scanf("%d %d %d %d %d", &nova_pessoa.musicas[0], 
+    scanf("%d %d %d %d %d", 
+    &nova_pessoa.musicas[0], 
     &nova_pessoa.musicas[1], 
     &nova_pessoa.musicas[2], 
     &nova_pessoa.musicas[3], 
@@ -98,22 +105,15 @@ void inicializa_descritor(Descritor* d){
     d->inicio = d->final = NULL; 
 }
 
-void inicializa_nopessoa(NoPessoa* p, Musicas* m){
-    p->anterior = p->proximo = NULL;
-    p->pessoa = le_pessoa(m);
-}
-
-//verifica se uma lista de pessoas está vázia
-int lista_vazia(Descritor* d){  //MUDAR POR CAUSA DO DESCRITOR?
+int lista_vazia(Descritor* d){
     return (d->inicio == NULL && d->final == NULL);
 }
 
-
-//função de buscar elemento retirada
-
 void inserir_pessoa(Descritor* d, Musicas* m){
     NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
-    inicializa_nopessoa(novo_np, m);
+
+    novo_np->anterior = novo_np->proximo = NULL;
+    novo_np->pessoa = le_pessoa(m);
 
     if(lista_vazia(d)){  //insere na primeira posição da lista
         d->inicio = d->final = novo_np;
@@ -141,24 +141,57 @@ void imprime_geral(Descritor* d){
             printf("\n MÚSICAS: ");  
             for(int i = 0; i < 5; i++){
                 printf("\n\tCod.: %d", np->pessoa.musicas[i]);
-                //printf("\n\tVezes selecionada: %d", np->pessoa.musicas[i]->vezes_selecionada);
             }
         }
     }else{
-        printf("\n A LISTA DE ENTREVISTADOS ESTÁ VAZIA! POR FAVOR INSIRA ALGUM PARA QUE POSSAMOS MOSTRA-LO AQUI!");
+        printf("\n ERROR: LISTA DE ENTREVISTADOS VAZIA!");
     }
 }
 
-void listar_populares(Descritor* d, Musicas* m){
+void listar_musicas(Musicas* m){
+    lt();
+    printf("\n TODAS AS MÚSICAS:");
+    for(int i = 0; i < N; i++){
+        printf("\n [%d] %s - %s", m[i].id, m[i].nome, m[i].autor);
+    }
+}
 
-    
-    for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){  //percorre a lista de pessoas 
-        for(int i = 0; i < 5; i++){  //dentro de cada pessoa, percorre os 5 id's ecolhidos
-            for(int j = 0; j < N; j++){  //percorre dentro da lista de musicas de tamanho 30
-                if(m[j].id == np->pessoa.musicas[i]){  //encontra a posição correspondente ao id de cada musica da pessoa
-                    m[j].vezes_selecionadas++;  //adicionda a vez que a música foi selecionada
-                }
+void listar_musicas_populares(Musicas* m)
+{
+
+    FILE *arquivo_txt = fopen("musicas_populares.txt", "r");
+    rewind(arquivo_txt);
+
+    Musicas temp;
+    int i = 0;
+
+    lt();
+    printf("\n MÚSICAS POPULARES:");
+
+    while (fscanf(arquivo_txt,"%d\t%[^\t]\t%[^\t]\t%d\n", &temp.id, temp.nome, temp.autor, &temp.vezes_selecionadas) != EOF){
+        printf("\n [%d] %s - %s : %d", temp.id, temp.nome, temp.autor, temp.vezes_selecionadas);
+    }
+
+    fclose(arquivo_txt);
+}
+
+void atualiza_id_global(){
+    id_global++;
+}
+
+void shellSortMusica(Musicas* m, int tam) {
+    int espaco = tam / 2;
+    while (espaco > 0) {
+        for (int i = espaco; i < tam; i++) {
+            Musicas temp = m[i];
+            int j = i;
+            while (j >= espaco && m[j - espaco].vezes_selecionadas > temp.vezes_selecionadas) {
+                m[j] = m[j - espaco];
+                j -= espaco;
             }
+            m[j] = temp;
         }
+        espaco /= 2;
     }
 }
+

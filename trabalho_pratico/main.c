@@ -16,20 +16,17 @@ int main(int argc, char** argv){
     Descritor* d = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(d);
 
-    Musicas lista_populares[N];
+    Musicas musicas[N];
+    Musicas musicas_populares[N];
 
 //-----> VARIÁVEIS SECUNDÁRIAS <-----//
 
     int escolha;
     bool condicao = true;
 
-    //VARIÁVEIS RETIRADAS
-    //int id_buscado, id_buscado_2;
-    //char curso_buscado[255];
-
-    inserir_musicas_arquivo(lista_populares);
-
-
+    //inserir_musicas_arquivo(musicas);
+    //inserir_musicas_populares_arquivo(musicas_populares);
+    inserir_pessoas_arquivo(d);
 
 //-----> O RESTO DA MAIN <-----//
     while(condicao){
@@ -50,25 +47,37 @@ int main(int argc, char** argv){
         switch (escolha)
         {
         case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
+           
+            inserir_musicas_arquivo(musicas);
+            inserir_musicas_populares_arquivo(musicas_populares);
 
-            printf("\n OPÇÃO NÚMERO 0 SELECIONADA!");
-            inserir_pessoa(d, lista_populares);
+            printf("\n OPÇÃO SELECIONADA : ADICIONAR NOVO ENTREVISTADO");
+            inserir_pessoa(d, musicas);
 
-            break;
-
-        case 1:  //ALTERA OS DADOS DE UM ALUNO
+            salvar_musicas_arquivo(musicas);
+            salvar_musicas_populares_arquivo(musicas, musicas_populares);
             
-            //alterar_dados(&ldp);
-            printf("\n OPÇÃO NÚMERO 1 SELECIONADA!");
-            imprime_geral(d);
+            break;
+
+        case 1: 
+            
+            inserir_musicas_arquivo(musicas);
+            inserir_musicas_populares_arquivo(musicas_populares);
+
+            //shellSortMusica(musicas_populares, d->tamanho);
+
+            printf("\n OPÇÃO SELECIONADA: LISTAR MÚSICAS MAIS POPULARES");
+            listar_musicas_populares(musicas_populares);
+
+            salvar_musicas_arquivo(musicas);
+            salvar_musicas_populares_arquivo(musicas, musicas_populares);
 
             break;
 
-        case 2:  //REMOVE OS DADOS DE UM ALUNO
+        case 2:  
                 
-            //remover_aluno(&ldp);
-            
             printf("\n OPÇÃO NÚMERO 2 SELECIONADA!");
+            listar_musicas(musicas);
 
             break;
             
@@ -76,7 +85,9 @@ int main(int argc, char** argv){
 
             lt();
 
-            salvar_musicas_arquivo(lista_populares);
+            salvar_musicas_arquivo(musicas);
+            salvar_musicas_populares_arquivo(musicas, musicas_populares);
+            salvar_pessoas(d);
             
             printf("\n PROGRAMA ENCERRADO!");
 
