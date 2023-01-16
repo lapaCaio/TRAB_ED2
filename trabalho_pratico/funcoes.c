@@ -81,17 +81,17 @@ Pessoa le_pessoa(Musicas* m){
         }
     }
 
-    if(nova_pessoa.sexo == 1){  //o 1 representa o sexo feminino
+    if(nova_pessoa.sexo == 0){  //o 1 representa o sexo feminino
         if(nova_pessoa.idade <= 20){
-            nova_pessoa.tipo = 1; //MULHERES com MENOS que 20 anos
+            nova_pessoa.tipo = 1; //HOMENS com MENOS que 20 anos
         }else{
-            nova_pessoa.tipo = 2;  //MULHERS com MAIS que 20 anos
+            nova_pessoa.tipo = 2;  //HOMENS com MAIS que 20 anos
         }
     }else{ //por outro lado o 0 representa o sexo masculino
         if(nova_pessoa.sexo <= 20){
-            nova_pessoa.tipo = 3;  //HOMENS com MENOS que 20 anos
+            nova_pessoa.tipo = 3;  //MULHERES com MENOS que 20 anos
         }else{
-            nova_pessoa.tipo = 4;  //HOMENS com MAIS que 20 anos
+            nova_pessoa.tipo = 4;  //MULHERES com MAIS que 20 anos
         }
     }
 
@@ -159,7 +159,7 @@ void listar_musicas(Musicas* m){
 void listar_musicas_populares(Musicas* m)
 {
 
-    FILE *arquivo_txt = fopen("musicas_populares.txt", "r");
+    FILE *arquivo_txt = fopen("arquivos/musicas_populares.txt", "r");
     rewind(arquivo_txt);
 
     Musicas temp;
@@ -179,6 +179,7 @@ void atualiza_id_global(){
     id_global++;
 }
 
+/*
 void shellSortMusica(Musicas* m, int tam) {
     int espaco = tam / 2;
     while (espaco > 0) {
@@ -195,5 +196,46 @@ void shellSortMusica(Musicas* m, int tam) {
     }
 
     salvar_musicas_populares_arquivo(m, m);
+}
+*/
+
+void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4){
+    for(NoPessoa* np = todos->inicio; np != NULL; np = np->proximo){
+        Descritor* temp;
+        if(np->pessoa.tipo == 1){ //HOMEM ABAIXO
+            temp = d1;
+        }else if(np->pessoa.tipo == 2){  //HOMEM ACIMA
+            temp = d2;
+        }else if(np->pessoa.tipo == 3){  //MULHER ABAIXO
+            temp = d3;
+        }else{  //MULHER ACIMA
+            temp = d4;
+        }
+
+        NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
+
+        novo_np->anterior = novo_np->proximo = NULL;
+        novo_np->pessoa = np->pessoa;
+
+        if(lista_vazia(temp)){ 
+            temp->inicio = temp->final = novo_np;
+            temp->tamanho++;
+        }else{
+            temp->final->proximo = novo_np;
+            novo_np->anterior = temp->final;
+            temp->final = novo_np;      
+            temp->tamanho++;
+        }
+    }
+}
+
+void imprime_categoria(Descritor* d){
+    if(!lista_vazia(d)){
+        for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
+            printf("\nNOME: %s %s", np->pessoa.nome, np->pessoa.sobrenome);
+        }    
+    }else{
+        printf("\n A CATEGORIA ESTÁ VAZIA!");
+    }
 }
 

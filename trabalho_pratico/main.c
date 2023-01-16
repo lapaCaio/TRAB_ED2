@@ -19,6 +19,17 @@ int main(int argc, char** argv){
     Musicas musicas[N];
     Musicas musicas_populares[N];
 
+    Descritor* homens_abaixo = (Descritor*)malloc(sizeof(Descritor));
+    inicializa_descritor(homens_abaixo);
+    Descritor* homens_acima = (Descritor*)malloc(sizeof(Descritor));
+    inicializa_descritor(homens_acima);
+    
+    Descritor* mulheres_abaixo = (Descritor*)malloc(sizeof(Descritor));
+    inicializa_descritor(mulheres_abaixo);
+    Descritor* mulheres_acima = (Descritor*)malloc(sizeof(Descritor));
+    inicializa_descritor(mulheres_acima);
+    
+
 //-----> VARIÁVEIS SECUNDÁRIAS <-----//
 
     int escolha;
@@ -64,7 +75,7 @@ int main(int argc, char** argv){
             inserir_musicas_arquivo(musicas);
             inserir_musicas_populares_arquivo(musicas_populares);
 
-            shellSortMusica(musicas_populares, d->tamanho);
+            //shellSortMusica(musicas_populares, d->tamanho);
 
             printf("\n OPÇÃO SELECIONADA: LISTAR MÚSICAS MAIS POPULARES");
             listar_musicas_populares(musicas_populares);
@@ -77,7 +88,15 @@ int main(int argc, char** argv){
         case 2:  
                 
             printf("\n OPÇÃO NÚMERO 2 SELECIONADA!");
-            listar_musicas(musicas);
+            separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
+            
+            imprime_categoria(homens_abaixo);
+            linha();
+            imprime_categoria(homens_acima);
+            linha();
+            imprime_categoria(mulheres_abaixo);
+            linha();
+            imprime_categoria(mulheres_acima);
 
             break;
             

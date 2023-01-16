@@ -73,4 +73,10 @@ void atualiza_id_global();
 //algoritmo de ordenação por diminuição de incremento
 void shellSortMusica(Musicas* m, int tam);
 
+//separa as pessoas em quatro listas, conforme sua categoria
+void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4);
+
+//imprime o nome e o sobrenome das pessoas da categoria
+void imprime_categoria(Descritor* d);
+
 #endif  //FUNCS

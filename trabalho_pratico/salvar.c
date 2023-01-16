@@ -8,7 +8,7 @@
 void inserir_musicas_arquivo(Musicas* m)
 {
 
-    FILE *arquivo_txt = fopen("musicas.txt", "r");
+    FILE *arquivo_txt = fopen("arquivos/musicas.txt", "r");
     rewind(arquivo_txt);
 
     Musicas temp;
@@ -28,7 +28,7 @@ void inserir_musicas_arquivo(Musicas* m)
 void salvar_musicas_arquivo(Musicas* m)
 {
 
-    FILE *arquivo_txt = fopen("musicas.txt", "w");
+    FILE *arquivo_txt = fopen("arquivos/musicas.txt", "w");
 
     for(int i = 0; i < 30; i++){
         fprintf(arquivo_txt, "%d\t%s\t%s\t%d\n", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
@@ -41,7 +41,7 @@ void salvar_musicas_arquivo(Musicas* m)
 void inserir_musicas_populares_arquivo(Musicas* m)
 {
 
-    FILE *arquivo_txt = fopen("musicas_populares.txt", "r");
+    FILE *arquivo_txt = fopen("arquivos/musicas_populares.txt", "r");
     rewind(arquivo_txt);
 
     Musicas temp;
@@ -61,7 +61,7 @@ void inserir_musicas_populares_arquivo(Musicas* m)
 void salvar_musicas_populares_arquivo(Musicas* m, Musicas* saida)
 {
 
-    FILE *arquivo_txt = fopen("musicas_populares.txt", "w");
+    FILE *arquivo_txt = fopen("arquivos/musicas_populares.txt", "w");
 
     for(int i = 0; i < 30; i++){
         if(m[i].vezes_selecionadas > 0){
@@ -74,7 +74,7 @@ void salvar_musicas_populares_arquivo(Musicas* m, Musicas* saida)
 
 void inserir_pessoas_arquivo(Descritor* d){
 
-    FILE *arquivo_txt = fopen("pessoas.txt", "r");
+    FILE *arquivo_txt = fopen("arquivos/pessoas.txt", "r");
     rewind(arquivo_txt);
 
     Pessoa temp;
@@ -109,7 +109,7 @@ void inserir_pessoas_arquivo(Descritor* d){
 void salvar_pessoas(Descritor* d)
 {
 
-    FILE *arquivo_txt = fopen("pessoas.txt", "w");
+    FILE *arquivo_txt = fopen("arquivos/pessoas.txt", "w");
 
     for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
         fprintf(arquivo_txt, "%d\t%s\t%s\t%d\t%d\t%d\n", np->pessoa.id, np->pessoa.nome, np->pessoa.sobrenome, np->pessoa.idade, np->pessoa.sexo, np->pessoa.tipo);
@@ -118,3 +118,5 @@ void salvar_pessoas(Descritor* d)
 
     fclose(arquivo_txt);
 }
+
+
