@@ -64,7 +64,7 @@ int main(int argc, char** argv){
             inserir_musicas_arquivo(musicas);
             inserir_musicas_populares_arquivo(musicas_populares);
 
-            //shellSortMusica(musicas_populares, d->tamanho);
+            shellSortMusica(musicas_populares, d->tamanho);
 
             printf("\n OPÇÃO SELECIONADA: LISTAR MÚSICAS MAIS POPULARES");
             listar_musicas_populares(musicas_populares);

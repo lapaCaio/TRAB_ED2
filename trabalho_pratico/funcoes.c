@@ -193,5 +193,7 @@ void shellSortMusica(Musicas* m, int tam) {
         }
         espaco /= 2;
     }
+
+    salvar_musicas_populares_arquivo(m, m);
 }
 
