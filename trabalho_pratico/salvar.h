@@ -23,4 +23,7 @@ void inserir_pessoas_arquivo(Descritor* d);
 //salva os dados das pessoas no arquivo "pessoas.txt"
 void salvar_pessoas(Descritor* d);
 
+//salva os dados das pessoas no arquivo que será passado como parâmetro
+void salvar_categoria(Descritor* d, int i);
+
 #endif  //SAVE

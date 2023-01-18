@@ -35,8 +35,8 @@ int main(int argc, char** argv){
     int escolha;
     bool condicao = true;
 
-    //inserir_musicas_arquivo(musicas);
-    //inserir_musicas_populares_arquivo(musicas_populares);
+    inserir_musicas_arquivo(musicas);
+    inserir_musicas_populares_arquivo(musicas_populares);
     inserir_pessoas_arquivo(d);
 
 //-----> O RESTO DA MAIN <-----//
@@ -107,6 +107,11 @@ int main(int argc, char** argv){
             salvar_musicas_arquivo(musicas);
             salvar_musicas_populares_arquivo(musicas, musicas_populares);
             salvar_pessoas(d);
+
+            salvar_categoria(homens_abaixo, 1);
+            salvar_categoria(homens_acima, 2);
+            salvar_categoria(mulheres_abaixo, 3);
+            salvar_categoria(mulheres_acima, 4);
             
             printf("\n PROGRAMA ENCERRADO!");
 

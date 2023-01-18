@@ -156,7 +156,7 @@ void listar_musicas(Musicas* m){
     }
 }
 
-void listar_musicas_populares(Musicas* m)
+void listar_musicas_populares(Musicas* m)  //AINDA NÃO LISTA POR ORDEM DE POPULARIDADE
 {
 
     FILE *arquivo_txt = fopen("arquivos/musicas_populares.txt", "r");
@@ -200,6 +200,10 @@ void shellSortMusica(Musicas* m, int tam) {
 */
 
 void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4){
+    if(lista_vazia(todos)){ 
+        printf("\n A LISTA DE ENTREVISTADOS ESTA VAZIA!");
+        return;
+    }
     for(NoPessoa* np = todos->inicio; np != NULL; np = np->proximo){
         Descritor* temp;
         if(np->pessoa.tipo == 1){ //HOMEM ABAIXO
@@ -208,12 +212,17 @@ void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor
             temp = d2;
         }else if(np->pessoa.tipo == 3){  //MULHER ABAIXO
             temp = d3;
-        }else{  //MULHER ACIMA
+        }else if(np->pessoa.tipo == 4){  //MULHER ACIMA
             temp = d4;
+        }else{
+            printf("\n ALGO DEU ERRADO!");
+            return;
         }
-
         NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
-
+        if(novo_np == NULL) {
+            printf("\n ERRO AO ALOCAR MEMORIA!");
+            return;
+        }
         novo_np->anterior = novo_np->proximo = NULL;
         novo_np->pessoa = np->pessoa;
 
@@ -228,6 +237,7 @@ void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor
         }
     }
 }
+
 
 void imprime_categoria(Descritor* d){
     if(!lista_vazia(d)){

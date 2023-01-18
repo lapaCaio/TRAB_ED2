@@ -119,4 +119,36 @@ void salvar_pessoas(Descritor* d)
     fclose(arquivo_txt);
 }
 
+void salvar_categoria(Descritor* d, int i){
+    char* nome_arquivo;
+    if(!lista_vazia(d)){
+        if(i == 1){
+            nome_arquivo = "categorias/homens_abaixo.txt"; 
+        }else if(i == 2){
+            nome_arquivo = "categorias/homens_acima.txt"; 
+        }else if(i == 3){
+            nome_arquivo = "categorias/mulheres_abaixo.txt"; 
+        }else if(i == 4){
+            nome_arquivo = "categorias/mulheres_acima.txt"; 
+        }else{
+            printf("\n VALOR INFORMADO É INVÁLIDO!");
+            return;
+        }
+
+        FILE *arquivo_txt = fopen(nome_arquivo, "w");
+
+        if(arquivo_txt == NULL) {
+            printf("ERRO AO ABRIR O ARQUIVO: %s\n",nome_arquivo);
+            return;
+        }
+
+        for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
+            fprintf(arquivo_txt, "%s\t%s\t\n", np->pessoa.nome, np->pessoa.sobrenome);
+        }
+
+        fclose(arquivo_txt);
+    }else{
+        printf("A LISTA ESTA VAZIA!\n");
+    }
+}
 
