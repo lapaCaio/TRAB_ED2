@@ -16,8 +16,8 @@ int main(int argc, char** argv){
     Descritor* d = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(d);
 
-    Musicas musicas[N];
-    Musicas musicas_populares[N];
+    ListaMusicas* lista_musicas = inicializarListaMusicas();
+    ListaMusicas* lista_musicas_populares = inicializarListaMusicas();
 
     Descritor* homens_abaixo = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(homens_abaixo);
@@ -35,9 +35,8 @@ int main(int argc, char** argv){
     int escolha;
     bool condicao = true;
 
-    inserir_musicas_arquivo(musicas);
-    inserir_musicas_populares_arquivo(musicas_populares);
-    inserir_pessoas_arquivo(d);
+    lerPessoasDoArquivo(d);
+    lerMusicasDoArquivo(lista_musicas, "arquivos/musicas.txt");
 
 //-----> O RESTO DA MAIN <-----//
     while(condicao){
@@ -48,7 +47,7 @@ int main(int argc, char** argv){
         linha();
         printf("\n 0 - ADICIONAR NOVO ENTREVISTADO");
         printf("\n 1 - LISTAR MÚSICAS MAIS POPULARES");
-        printf("\n 2 - MÚSICAS MAIS POPULARES POR CATEGORIA");
+        printf("\n 2 - LISTAR ENTREVISTADOS POR CATEGORIA");
         printf("\n 3 - SAIR");
         linha();
         printf("\n >>> ");
@@ -58,36 +57,30 @@ int main(int argc, char** argv){
         switch (escolha)
         {
         case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
-           
-            inserir_musicas_arquivo(musicas);
-            inserir_musicas_populares_arquivo(musicas_populares);
+            printf("\n OPÇÃO SELECIONADA: ADICIONAR NOVO ENTREVISTADO");
+            inserir_pessoa(d, lista_musicas);
 
-            printf("\n OPÇÃO SELECIONADA : ADICIONAR NOVO ENTREVISTADO");
-            inserir_pessoa(d, musicas);
-
-            salvar_musicas_arquivo(musicas);
-            salvar_musicas_populares_arquivo(musicas, musicas_populares);
+            //atualiza_musicas(d, musicas);
             
             break;
 
         case 1: 
-            
-            inserir_musicas_arquivo(musicas);
-            inserir_musicas_populares_arquivo(musicas_populares);
-
-            //shellSortMusica(musicas_populares, d->tamanho);
-
             printf("\n OPÇÃO SELECIONADA: LISTAR MÚSICAS MAIS POPULARES");
-            listar_musicas_populares(musicas_populares);
+            
+            separar_favoritas(lista_musicas, lista_musicas_populares);
+            int tam = tamanhoListaMusica(lista_musicas_populares);
+            printf("\n tamanho: %d", tam);
+            
+            shellSortListaMusica(lista_musicas_populares, tam);
+            listar_musicas(lista_musicas_populares);
 
-            salvar_musicas_arquivo(musicas);
-            salvar_musicas_populares_arquivo(musicas, musicas_populares);
+            atualiza_musicas(d, lista_musicas);
 
             break;
 
         case 2:  
                 
-            printf("\n OPÇÃO NÚMERO 2 SELECIONADA!");
+            printf("\n OPÇÃO SELECIONADA: LISTAR ENTREVISTADOS POR CATEGORIA");
             separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
             
             imprime_categoria(homens_abaixo);
@@ -104,14 +97,14 @@ int main(int argc, char** argv){
 
             lt();
 
-            salvar_musicas_arquivo(musicas);
-            salvar_musicas_populares_arquivo(musicas, musicas_populares);
-            salvar_pessoas(d);
+            salvarPessoasNoArquivo(d);
+            salvarMusicasArquivo(lista_musicas, "arquivos/musicas.txt");
+            salvarMusicasArquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
 
-            salvar_categoria(homens_abaixo, 1);
-            salvar_categoria(homens_acima, 2);
-            salvar_categoria(mulheres_abaixo, 3);
-            salvar_categoria(mulheres_acima, 4);
+            salvarCategoria(homens_abaixo, 1);
+            salvarCategoria(homens_acima, 2);
+            salvarCategoria(mulheres_abaixo, 3);
+            salvarCategoria(mulheres_acima, 4);
             
             printf("\n PROGRAMA ENCERRADO!");
 

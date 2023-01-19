@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include "funcoes.h"
 #include "salvar.h"
@@ -9,6 +10,8 @@
 int id_global = 1;
 
 typedef struct musica Musicas;
+
+typedef struct lista_de_musicas ListaMusicas;
 
 //----------> ESTRUTURAS <----------//
 
@@ -31,16 +34,17 @@ void linha(){
     printf("\n|------------------------------------------------------------------------------------------|");  
 }
 
+void atualiza_id_global(){
+    id_global++;
+}
+
 //----------> FUNÇÕES - TAD (PESSOA) <----------//
 
-Pessoa le_pessoa(Musicas* m){
+Pessoa le_pessoa(ListaMusicas* lm){  //OK
     Pessoa nova_pessoa;
 
     nova_pessoa.id = id_global;
     atualiza_id_global();
-
-
-    lb();
 
     printf("\n NOME: ");
     scanf("%[^\n]", nova_pessoa.nome);
@@ -62,7 +66,7 @@ Pessoa le_pessoa(Musicas* m){
     lb();
     
     linha();
-    listar_musicas(m);
+    listar_musicas(lm);
     linha();
     printf("\n Digite o código das músicas separadas por espaço (Ex.: 12 3 22 8 7).");
     printf("\n >>> ");
@@ -73,14 +77,6 @@ Pessoa le_pessoa(Musicas* m){
     &nova_pessoa.musicas[3], 
     &nova_pessoa.musicas[4]);
 
-    for(int i = 0; i < 5; i++){
-        for(int j = 0; j < N; j++){
-            if(m[j].id == nova_pessoa.musicas[i]){
-                m[j].vezes_selecionadas++;
-            }
-        }
-    }
-
     if(nova_pessoa.sexo == 0){  //o 1 representa o sexo feminino
         if(nova_pessoa.idade <= 20){
             nova_pessoa.tipo = 1; //HOMENS com MENOS que 20 anos
@@ -88,7 +84,7 @@ Pessoa le_pessoa(Musicas* m){
             nova_pessoa.tipo = 2;  //HOMENS com MAIS que 20 anos
         }
     }else{ //por outro lado o 0 representa o sexo masculino
-        if(nova_pessoa.sexo <= 20){
+        if(nova_pessoa.idade <= 20){
             nova_pessoa.tipo = 3;  //MULHERES com MENOS que 20 anos
         }else{
             nova_pessoa.tipo = 4;  //MULHERES com MAIS que 20 anos
@@ -100,20 +96,20 @@ Pessoa le_pessoa(Musicas* m){
 
 //----------> FUNÇÕES - DUPLAMENTE ENCADEADA (LISTA DE ALUNOS) <----------//
 
-void inicializa_descritor(Descritor* d){
+void inicializa_descritor(Descritor* d){  //OK
     d->tamanho = 0;
     d->inicio = d->final = NULL; 
 }
 
-int lista_vazia(Descritor* d){
+int lista_vazia(Descritor* d){  //OK
     return (d->inicio == NULL && d->final == NULL);
 }
 
-void inserir_pessoa(Descritor* d, Musicas* m){
+void inserir_pessoa(Descritor* d, ListaMusicas* lm){  //OK
     NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
 
     novo_np->anterior = novo_np->proximo = NULL;
-    novo_np->pessoa = le_pessoa(m);
+    novo_np->pessoa = le_pessoa(lm);
 
     if(lista_vazia(d)){  //insere na primeira posição da lista
         d->inicio = d->final = novo_np;
@@ -126,7 +122,31 @@ void inserir_pessoa(Descritor* d, Musicas* m){
     }
 }
 
-void imprime_geral(Descritor* d){
+void remover_pessoa(Descritor* d, int id) {
+    NoPessoa* atual = d->inicio;
+
+    while (atual != NULL) {
+        if (atual->pessoa.id == id) {
+            if (atual == d->inicio) {
+                d->inicio = atual->proximo;
+                d->inicio->anterior = NULL;
+            } else if (atual == d->final) {
+                d->final = atual->anterior;
+                d->final->proximo = NULL;
+            } else {
+                atual->anterior->proximo = atual->proximo;
+                atual->proximo->anterior = atual->anterior;
+            }
+            free(atual);
+            d->tamanho--;
+            return;
+        }
+        atual = atual->proximo;
+    }
+    printf("NAO FOI ENCONTRADA UMA PESSOA COM O ID ESPECIFICADO!\n");
+}
+
+void imprime_pessoas(Descritor* d){  //OK
     if(!lista_vazia(d)){
         for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
             printf("\n ID: %d", np->pessoa.id);
@@ -148,56 +168,44 @@ void imprime_geral(Descritor* d){
     }
 }
 
-void listar_musicas(Musicas* m){
+ListaMusicas* inicializarListaMusicas(){
+    ListaMusicas* novoNo = (ListaMusicas*)malloc(sizeof(ListaMusicas));
+    novoNo->proximo = NULL;
+    return novoNo;
+}
+
+int estaVazia(ListaMusicas* lm){
+    return lm->proximo == NULL;
+}
+
+void inserirMusica(ListaMusicas* lm, Musica novaMusica){
+    ListaMusicas* novoNo = inicializarListaMusicas();
+    novoNo->m = novaMusica;
+    if(estaVazia(lm)){
+        lm->proximo = novoNo;
+    }else{
+        ListaMusicas* atual = lm->proximo;
+        while(atual->proximo != NULL){
+            atual = atual->proximo;
+        }
+        atual->proximo = novoNo;
+    }
+}
+
+void listar_musicas(ListaMusicas* lm){  //OK
     lt();
     printf("\n TODAS AS MÚSICAS:");
-    for(int i = 0; i < N; i++){
-        printf("\n [%d] %s - %s", m[i].id, m[i].nome, m[i].autor);
+
+    for(ListaMusicas* atual = lm->proximo; atual != NULL; atual = atual->proximo){
+        printf("\n [%d] %s - %s - %d", atual->m.id, atual->m.nome, atual->m.autor, atual->m.vezes_selecionadas);
     }
 }
 
-void listar_musicas_populares(Musicas* m)  //AINDA NÃO LISTA POR ORDEM DE POPULARIDADE
-{
-
-    FILE *arquivo_txt = fopen("arquivos/musicas_populares.txt", "r");
-    rewind(arquivo_txt);
-
-    Musicas temp;
-    int i = 0;
-
-    lt();
-    printf("\n MÚSICAS POPULARES:");
-
-    while (fscanf(arquivo_txt,"%d\t%[^\t]\t%[^\t]\t%d\n", &temp.id, temp.nome, temp.autor, &temp.vezes_selecionadas) != EOF){
-        printf("\n [%d] %s - %s : %d", temp.id, temp.nome, temp.autor, temp.vezes_selecionadas);
+void separar_favoritas(ListaMusicas* lm, ListaMusicas* saida){
+    for(ListaMusicas* atual = lm->proximo; atual != NULL && atual->m.vezes_selecionadas != 0; atual = atual->proximo){
+        inserirMusica(saida, atual->m);
     }
-
-    fclose(arquivo_txt);
 }
-
-void atualiza_id_global(){
-    id_global++;
-}
-
-/*
-void shellSortMusica(Musicas* m, int tam) {
-    int espaco = tam / 2;
-    while (espaco > 0) {
-        for (int i = espaco; i < tam; i++) {
-            Musicas temp = m[i];
-            int j = i;
-            while (j >= espaco && m[j - espaco].vezes_selecionadas > temp.vezes_selecionadas) {
-                m[j] = m[j - espaco];
-                j -= espaco;
-            }
-            m[j] = temp;
-        }
-        espaco /= 2;
-    }
-
-    salvar_musicas_populares_arquivo(m, m);
-}
-*/
 
 void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4){
     if(lista_vazia(todos)){ 
@@ -238,7 +246,6 @@ void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor
     }
 }
 
-
 void imprime_categoria(Descritor* d){
     if(!lista_vazia(d)){
         for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
@@ -248,4 +255,66 @@ void imprime_categoria(Descritor* d){
         printf("\n A CATEGORIA ESTÁ VAZIA!");
     }
 }
+
+void resetMusicas(ListaMusicas* lm) {
+    ListaMusicas* atual = lm;
+    while (atual != NULL) {
+        atual->m.vezes_selecionadas = 0;
+        atual = atual->proximo;
+    }
+}
+
+void atualiza_musicas(Descritor* d,  ListaMusicas* lm){
+    //reinicia o valor das vezes_selecionadas para zero
+    resetMusicas(lm);
+
+    //coletando as informações das músicas a partir da lista total de pessoas
+    ListaMusicas* atual = lm;
+    for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
+        for(int i = 0; i < 5; i++){
+            while(atual != NULL){
+                if(atual->m.id == np->pessoa.musicas[i]){
+                    atual->m.vezes_selecionadas++;
+                }
+                atual = atual->proximo;
+            }
+        }
+    }
+}
+
+
+int tamanhoListaMusica(ListaMusicas* lm) {
+    int tamanho = 0;
+    ListaMusicas* atual = lm->proximo;
+    while (atual != NULL) {
+        tamanho++;
+        atual = atual->proximo;
+    }
+    return tamanho;
+}
+
+
+void shellSortListaMusica(ListaMusicas* lm, int tam) {
+    ListaMusicas* atual;
+    int h, i, j;
+    Musica temp;
+    for (h = tam/2; h > 0; h /= 2) {
+        for (i = h; i < tam; i++) {
+            atual = lm;
+            for (j = i - h; j >= 0; j -= h) {
+                for (int k = 0; k < j; k++) {
+                    atual = atual->proximo;
+                }
+                if (atual->m.vezes_selecionadas >= atual->proximo->m.vezes_selecionadas) {
+                    temp = atual->m;
+                    atual->m = atual->proximo->m;
+                    atual->proximo->m = temp;
+                }
+            }
+        }
+    }
+}
+
+
+
 

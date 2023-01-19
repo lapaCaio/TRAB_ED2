@@ -7,7 +7,12 @@ typedef struct musica{
     char nome[30];
     char autor[30];
     int vezes_selecionadas;
-}Musicas;
+}Musica;
+
+typedef struct lista_de_musicas{
+    Musica m;
+    struct lista_de_musicas* proximo;
+}ListaMusicas;
 
 //estrutura para guardar as informações de cada pessoa
 typedef struct pessoa {
@@ -43,8 +48,11 @@ void lt();
 //cria uma linha(usada para organização das informações no terminal)
 void linha();
 
+//acrescenta +1 no id global
+void atualiza_id_global();
+
 // coleta todas as informações de uma pessoa entrevistada
-Pessoa le_pessoa(Musicas* m);
+Pessoa le_pessoa(ListaMusicas* lm);
 
 //preenche o descritor com as informações básicas
 void inicializa_descritor(Descritor* d);
@@ -52,31 +60,45 @@ void inicializa_descritor(Descritor* d);
 //verifica se a lista está vazia
 int lista_vazia(Descritor* d);
 
-//imprime todas as informações coletadas das pessoas entrevistadas
-void imprime_geral(Descritor* d);
+//insere uma pessoa na lista, com suas informações
+void inserir_pessoa(Descritor* d, ListaMusicas* lm);
 
-//lista as músicas populares
-void listar_populares(Descritor* d, Musicas* m);
+//remove uma pessoa da lista, com suas informações
+void remover_pessoa(Descritor* d, int id);
 
-//adiciona uma nova pessoa na lista de pessoas entrevistadas
-void inserir_pessoa(Descritor* d, Musicas* m);
+//imprime a lista de todas as pessoas
+void imprime_pessoas(Descritor* d);
 
-//lista todas a músicas
-void listar_musicas(Musicas* m);
+//inicializa  lista de músicas com suas iformações básicas
+ListaMusicas* inicializarListaMusicas();
 
-//lista as músicas populares
-void listar_musicas_populares(Musicas* m);
+//verifica se a lista de músicas está vazia
+int estaVazia(ListaMusicas* lm);
 
-//acrescenta +1 no id global
-void atualiza_id_global();
+//insere uma música na lista de músicas
+void inserirMusica(ListaMusicas* lm, Musica novaMusica);
 
-//algoritmo de ordenação por diminuição de incremento
-void shellSortMusica(Musicas* m, int tam);
+//imprime uma lista de todas as músicas
+void listar_musicas(ListaMusicas* lm);
 
-//separa as pessoas em quatro listas, conforme sua categoria
+//separa as músicas favoritas de uma lista para outra
+void separar_favoritas(ListaMusicas* lm, ListaMusicas* saida);
+
+//separa as pessoas em quatro categorias distintas
 void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4);
 
-//imprime o nome e o sobrenome das pessoas da categoria
+//imprime todas as pessoas da categoria selecionada
 void imprime_categoria(Descritor* d);
 
+//troca o valor das vezes_selecionadas de todas as músicas para zero
+void resetMusicas(ListaMusicas* lm);
+
+//atualiza as informações das listas de músicas
+void atualiza_musicas(Descritor* d,  ListaMusicas* lm);
+
+//função que retorna o tamanho de uma lista de músicas
+int tamanhoListaMusica(ListaMusicas* lm);
+
+//função que ordena a lista de músicas com base nas vezes_selecionadas 
+void shellSortListaMusica(ListaMusicas* lm, int tam);
 #endif  //FUNCS

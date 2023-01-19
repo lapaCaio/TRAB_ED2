@@ -3,27 +3,23 @@
 
 typedef struct musica Musicas;
 
+typedef struct lista_de_musicas ListaMusicas;
+
 typedef struct descritor Descritor;
 
-//preenche a estrutura de músicas com todas as músicas 
-void inserir_musicas_arquivo(Musicas* m);
-
-//salva as músicas no arquivo "musicas.txt"
-void salvar_musicas_arquivo(Musicas* m);
-
-//preenche a lista de músicas com as músicas mais populares
-void inserir_musicas_populares_arquivo(Musicas* m);
-
-//salva as músicas no arquivo "musicas_populares.txt"
-void salvar_musicas_populares_arquivo(Musicas* m, Musicas* saida);
-
 //preenche a estrutura com todas as pessoas
-void inserir_pessoas_arquivo(Descritor* d);
+void lerPessoasDoArquivo(Descritor* d);
 
 //salva os dados das pessoas no arquivo "pessoas.txt"
-void salvar_pessoas(Descritor* d);
+void salvarPessoasNoArquivo(Descritor* d);
 
 //salva os dados das pessoas no arquivo que será passado como parâmetro
-void salvar_categoria(Descritor* d, int i);
+void salvarCategoria(Descritor* d, int i);
+
+//le do arquivo todas a músicas e preenche a lista com elas
+void lerMusicasDoArquivo(ListaMusicas* lm, char* nomeArquivo);
+
+//salva as músicas em um arquivo
+void salvarMusicasArquivo(ListaMusicas* lm, char* nomeArquivo);
 
 #endif  //SAVE
