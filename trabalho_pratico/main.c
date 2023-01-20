@@ -71,8 +71,8 @@ int main(int argc, char** argv){
             int tam = tamanhoListaMusica(lista_musicas_populares);
             printf("\n tamanho: %d", tam);
             
-            shellSortListaMusica(lista_musicas_populares, tam);
-            listar_musicas(lista_musicas_populares);
+            shellSortListaMusica(lista_musicas_populares);
+            //listar_musicas(lista_musicas_populares);
 
             atualiza_musicas(d, lista_musicas);
 

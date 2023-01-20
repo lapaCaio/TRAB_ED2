@@ -193,7 +193,7 @@ void inserirMusica(ListaMusicas* lm, Musica novaMusica){
 }
 
 void listar_musicas(ListaMusicas* lm){  //OK
-    lt();
+    //lt();
     printf("\n TODAS AS MÚSICAS:");
 
     for(ListaMusicas* atual = lm->proximo; atual != NULL; atual = atual->proximo){
@@ -293,27 +293,48 @@ int tamanhoListaMusica(ListaMusicas* lm) {
     return tamanho;
 }
 
-
-void shellSortListaMusica(ListaMusicas* lm, int tam) {
-    ListaMusicas* atual;
+//ENTENDER O FUNCIONAMENTO DO SHELLSORT...
+void shellSortListaMusica(ListaMusicas* lm) {
+    if (lm == NULL) {
+        printf("\n lm é nulo");
+        return;
+    }
+    ListaMusicas* atual = lm;
+    printf("\n atual recebe lm");
     int h, i, j;
     Musica temp;
+    int tam = tamanhoListaMusica(lm);
+    printf("\n tam recebe o retorno da função (%d)", tam);
+
     for (h = tam/2; h > 0; h /= 2) {
+        printf("\n h: %d", h);
         for (i = h; i < tam; i++) {
-            atual = lm;
+            printf("\n i: %d", i);
+            atual = lm->proximo;  //recebe o proximo
+            printf("\n atual recebe lm dnv");
+            printf("\n %d - %s - %d", atual->m.id, atual->m.nome, atual->m.vezes_selecionadas);
             for (j = i - h; j >= 0; j -= h) {
+                printf("\n j: %d", j);
                 for (int k = 0; k < j; k++) {
+                    printf("\n k: %d", k);
                     atual = atual->proximo;
+                    printf("\n atual recebe atual->proximo");
                 }
+                printf("\n entrando no if");
                 if (atual->m.vezes_selecionadas >= atual->proximo->m.vezes_selecionadas) {
                     temp = atual->m;
+                    printf("\n temp recebe atual->m");
                     atual->m = atual->proximo->m;
+                    printf("\n atual->m recebe proximo->m");
                     atual->proximo->m = temp;
+                    printf("\natual->proximo recebe temp (atual->m)");
+                    listar_musicas(lm);
                 }
             }
         }
     }
 }
+
 
 
 

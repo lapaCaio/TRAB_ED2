@@ -51,12 +51,15 @@ int tamanhoListaMusica(ListaMusicas* lm) {
     }
     return tamanho;
 }
-
-
-void shellSortListaMusica(ListaMusicas* lm, int tam) {
-    ListaMusicas* atual;
+void shellSortListaMusica(ListaMusicas* lm) {
+    if (lm == NULL) {
+        return;
+    }
+    ListaMusicas* atual = lm;
     int h, i, j;
     Musica temp;
+    int tam = tamanhoListaMusica(lm);
+
     for (h = tam/2; h > 0; h /= 2) {
         for (i = h; i < tam; i++) {
             atual = lm;
@@ -73,4 +76,5 @@ void shellSortListaMusica(ListaMusicas* lm, int tam) {
         }
     }
 }
+
 

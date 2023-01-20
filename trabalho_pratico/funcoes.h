@@ -100,5 +100,5 @@ void atualiza_musicas(Descritor* d,  ListaMusicas* lm);
 int tamanhoListaMusica(ListaMusicas* lm);
 
 //função que ordena a lista de músicas com base nas vezes_selecionadas 
-void shellSortListaMusica(ListaMusicas* lm, int tam);
+void shellSortListaMusica(ListaMusicas* lm);
 #endif  //FUNCS
