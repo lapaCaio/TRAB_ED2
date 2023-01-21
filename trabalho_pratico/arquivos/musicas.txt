@@ -1,11 +1,11 @@
-1	Master Of Puppets	Metallica	1
-2	Maura	Manoel Gomes	1
-3	Paint It Black	The Rolling Stones	2
-4	Shape Of My Heart	Sting	3
 5	Bohemian Rhapsody	Queen	3
 6	The Real Slim Shady	Eminem	3
 7	Garçon	Reginaldo Rossi	3
+4	Shape Of My Heart	Sting	3
+3	Paint It Black	The Rolling Stones	2
 8	Dream On	Aerosmith	2
+1	Master Of Puppets	Metallica	1
+2	Maura	Manoel Gomes	1
 9	505	Arctic Monkeys	1
 10	House Of Memories	Panic! At The Disco	1
 11	Aint No Rest For The Wicked	Cage The Elephant	0

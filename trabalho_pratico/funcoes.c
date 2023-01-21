@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "funcoes.h"
 #include "salvar.h"
@@ -138,7 +139,10 @@ void imprime_pessoas(Descritor* d){  //OK
 
 void inicializar_musicas(Musicas* m){
     for(int i = 0; i < N; i++){
+        m[i].id = i + 1;
         m[i].vezes_selecionadas = 0;
+        strcpy(m[i].nome, "vazio");
+        strcpy(m[i].autor, "vazio");
     }
 }
 
@@ -147,7 +151,7 @@ void listar_musicas(Musicas* m){  //OK
     printf("\n TODAS AS MÚSICAS:");
 
     for(int i = 0; i < N; i++){
-        printf("\n [%d] %s - %s - %d", m->id, m->nome, m->autor, m->vezes_selecionadas);
+        printf("\n [%d] %s - %s - %d", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
     }
 }
 

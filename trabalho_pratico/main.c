@@ -9,26 +9,55 @@
 
 #define N 30
 
+void shellsort(Musicas *m, int tamanho ) {
+    int i, j, h;
+    Musicas auxiliar;
+
+    h = 1;
+
+    while (h < tamanho){
+        h = h*3+1;
+    }
+        
+    while ( h > 1 ) {
+        h = (h-1)/3;
+        for ( i = h; i < tamanho; i++ ) {
+            auxiliar = m[i];
+            j = i-h;
+            while  ( j >= 0 && auxiliar.vezes_selecionadas > m[j].vezes_selecionadas ) {
+                m[j+h] = m[j];
+                j = j - h;
+            }
+            if ( j != (i-h)) 
+                m[j+h] = auxiliar;
+        }
+
+    }
+}
+
 int main(int argc, char** argv){
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "portuguese");
 
 //-----> VARIÁVEIS PRINCIPAIS <------//
-    Descritor* d = (Descritor*)malloc(sizeof(Descritor));
-    inicializa_descritor(d);
+    // Descritor* d = (Descritor*)malloc(sizeof(Descritor));
+    // inicializa_descritor(d);
 
-    Musicas* lista_musicas;
+    Musicas lista_musicas[N];
     inicializar_musicas(lista_musicas);
-    Musicas* lista_musicas_populares;
-    inicializar_musicas(lista_musicas_populares);
+    //listar_musicas(lista_musicas);
 
-    Descritor* homens_abaixo = (Descritor*)malloc(sizeof(Descritor));
-    inicializa_descritor(homens_abaixo);
-    Descritor* homens_acima = (Descritor*)malloc(sizeof(Descritor));
-    inicializa_descritor(homens_acima);
-    Descritor* mulheres_abaixo = (Descritor*)malloc(sizeof(Descritor));
-    inicializa_descritor(mulheres_abaixo);
-    Descritor* mulheres_acima = (Descritor*)malloc(sizeof(Descritor));
-    inicializa_descritor(mulheres_acima);
+    // Musicas lista_musicas_populares[N];
+    // inicializar_musicas(lista_musicas_populares);
+    //listar_musicas(lista_musicas_populares);
+
+    // Descritor* homens_abaixo = (Descritor*)malloc(sizeof(Descritor));
+    // inicializa_descritor(homens_abaixo);
+    // Descritor* homens_acima = (Descritor*)malloc(sizeof(Descritor));
+    // inicializa_descritor(homens_acima);
+    // Descritor* mulheres_abaixo = (Descritor*)malloc(sizeof(Descritor));
+    // inicializa_descritor(mulheres_abaixo);
+    // Descritor* mulheres_acima = (Descritor*)malloc(sizeof(Descritor));
+    // inicializa_descritor(mulheres_acima);
     
 
 //-----> VARIÁVEIS SECUNDÁRIAS <-----//
@@ -36,7 +65,7 @@ int main(int argc, char** argv){
     int escolha;
     bool condicao = true;
 
-    ler_pessoas_do_arquivo(d);
+    //ler_pessoas_do_arquivo(d);
     ler_musicas_do_arquivo(lista_musicas, "arquivos/musicas.txt");
 
 //-----> O RESTO DA MAIN <-----//
@@ -59,7 +88,7 @@ int main(int argc, char** argv){
         {
         case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
             printf("\n OPÇÃO SELECIONADA: ADICIONAR NOVO ENTREVISTADO");
-            inserir_pessoa(d, le_pessoa(lista_musicas));
+            //inserir_pessoa(d, le_pessoa(lista_musicas));
 
             //atualiza_musicas(d, musicas);
             
@@ -68,25 +97,26 @@ int main(int argc, char** argv){
         case 1: 
             printf("\n OPÇÃO SELECIONADA: LISTAR MÚSICAS MAIS POPULARES");
             
-            separar_populares(lista_musicas, lista_musicas_populares);
-            //listar_musicas(lista_musicas_populares);
+            //separar_populares(lista_musicas, lista_musicas_populares);
+            shellsort(lista_musicas, N);
+            listar_musicas(lista_musicas);
 
-            atualiza_musicas(d, lista_musicas);
+            //atualiza_musicas(d, lista_musicas);
 
             break;
 
         case 2:  
                 
             printf("\n OPÇÃO SELECIONADA: LISTAR ENTREVISTADOS POR CATEGORIA");
-            separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
+            //separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
             
-            imprime_categoria(homens_abaixo);
-            linha();
-            imprime_categoria(homens_acima);
-            linha();
-            imprime_categoria(mulheres_abaixo);
-            linha();
-            imprime_categoria(mulheres_acima);
+            //imprime_categoria(homens_abaixo);
+            //linha();
+            //imprime_categoria(homens_acima);
+            //linha();
+            //imprime_categoria(mulheres_abaixo);
+            //linha();
+            //imprime_categoria(mulheres_acima);
 
             break;
             
@@ -94,14 +124,14 @@ int main(int argc, char** argv){
 
             lt();
 
-            salvar_pessoas_no_arquivo(d);
+            //salvar_pessoas_no_arquivo(d);
             salvar_musicas_no_arquivo(lista_musicas, "arquivos/musicas.txt");
-            salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
+            //salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
 
-            salvar_categoria(homens_abaixo, 1);
-            salvar_categoria(homens_acima, 2);
-            salvar_categoria(mulheres_abaixo, 3);
-            salvar_categoria(mulheres_acima, 4);
+            //salvar_categoria(homens_abaixo, 1);
+            //salvar_categoria(homens_acima, 2);
+            //salvar_categoria(mulheres_abaixo, 3);
+            //salvar_categoria(mulheres_acima, 4);
             
             printf("\n PROGRAMA ENCERRADO!");
 
