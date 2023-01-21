@@ -5,8 +5,16 @@
 #include "salvar.h"
 #include "funcoes.h"
 
+#define N 30
 
-void lerPessoasDoArquivo(Descritor* d){
+typedef struct descritor Descritor;
+
+typedef struct musica Musicas;
+
+typedef struct nopessoa NoPessoa;
+
+
+void ler_pessoas_do_arquivo(Descritor* d){
 
     FILE *arquivo_txt = fopen("arquivos/pessoas.txt", "r");
     rewind(arquivo_txt);
@@ -18,30 +26,16 @@ void lerPessoasDoArquivo(Descritor* d){
         
         fscanf(arquivo_txt,"\t%d\t%d\t%d\t%d\t%d\n", &temp.musicas[0], &temp.musicas[1], &temp.musicas[2], &temp.musicas[3], &temp.musicas[4]);
         
+        inserir_pessoa(d, temp);
         atualiza_id_global();
-    
-        NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
-        
-        novo_np->anterior = novo_np->proximo = NULL;
-        novo_np->pessoa = temp;
 
-        if(lista_vazia(d)){  //insere na primeira posição da lista
-            d->inicio = d->final = novo_np;
-            d->tamanho++;
-        }else{  //insere nos outros locais da lista
-            d->final->proximo = novo_np;
-            novo_np->anterior = d->final;
-            d->final = novo_np;      
-            d->tamanho++;
-        }
         i++;
     }
 
     fclose(arquivo_txt);
 }
 
-void salvarPessoasNoArquivo(Descritor* d)
-{
+void salvar_pessoas_no_arquivo(Descritor* d){
 
     FILE *arquivo_txt = fopen("arquivos/pessoas.txt", "w");
 
@@ -55,7 +49,7 @@ void salvarPessoasNoArquivo(Descritor* d)
 
 //-------------------------------------------------------------------------------------------------------------------------------
 
-void salvarCategoria(Descritor* d, int i){
+void salvar_categoria(Descritor* d, int i){
     char* nome_arquivo;
     if(!lista_vazia(d)){
         if(i == 1){
@@ -88,31 +82,30 @@ void salvarCategoria(Descritor* d, int i){
     }
 }
 
-void lerMusicasDoArquivo(ListaMusicas* lm, char* nomeArquivo){
+void ler_musicas_do_arquivo(Musicas* m, char* nomeArquivo){
     FILE* arquivo = fopen(nomeArquivo, "r");
     if(arquivo == NULL){
         printf("ERRO AO ABRIR ARQUIVO\n");
         return;
     }
-    Musica novaMusica;
-    while(fscanf(arquivo, "%d\t%[^\t]\t%[^\t]\t%d\n", &novaMusica.id, novaMusica.nome, novaMusica.autor, &novaMusica.vezes_selecionadas) != EOF){
-        inserirMusica(lm, novaMusica);
-        printf("\n >>> %d", novaMusica.vezes_selecionadas);
+    Musicas nova_musica;
+    int i = 0;
+    while(fscanf(arquivo, "%d\t%[^\t]\t%[^\t]\t%d\n", &nova_musica.id, nova_musica.nome, nova_musica.autor, &nova_musica.vezes_selecionadas) != EOF){
+        m[i] = nova_musica;
     }
     fclose(arquivo);
 }
 
-void salvarMusicasArquivo(ListaMusicas* lista, char* nomeArquivo){
+void salvar_musicas_no_arquivo(Musicas* m, char* nomeArquivo){
     FILE* arquivo = fopen(nomeArquivo, "w");
     if(arquivo == NULL){
         printf("ERRO AO ABRIR O ARQUIVO\n");
         return;
     }
-    ListaMusicas* atual = lista->proximo;
-    while(atual != NULL){
-        fprintf(arquivo, "%d\t%s\t%s\t%d\n", atual->m.id, atual->m.nome, atual->m.autor, atual->m.vezes_selecionadas);
-        atual = atual->proximo;
+    for(int i = 0; i < N; i++){
+        fprintf(arquivo, "%d\t%s\t%s\t%d\n", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
     }
+
     fclose(arquivo);
 }
 

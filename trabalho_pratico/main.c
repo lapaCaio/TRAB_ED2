@@ -16,14 +16,15 @@ int main(int argc, char** argv){
     Descritor* d = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(d);
 
-    ListaMusicas* lista_musicas = inicializarListaMusicas();
-    ListaMusicas* lista_musicas_populares = inicializarListaMusicas();
+    Musicas* lista_musicas;
+    inicializar_musicas(lista_musicas);
+    Musicas* lista_musicas_populares;
+    inicializar_musicas(lista_musicas_populares);
 
     Descritor* homens_abaixo = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(homens_abaixo);
     Descritor* homens_acima = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(homens_acima);
-    
     Descritor* mulheres_abaixo = (Descritor*)malloc(sizeof(Descritor));
     inicializa_descritor(mulheres_abaixo);
     Descritor* mulheres_acima = (Descritor*)malloc(sizeof(Descritor));
@@ -35,8 +36,8 @@ int main(int argc, char** argv){
     int escolha;
     bool condicao = true;
 
-    lerPessoasDoArquivo(d);
-    lerMusicasDoArquivo(lista_musicas, "arquivos/musicas.txt");
+    ler_pessoas_do_arquivo(d);
+    ler_musicas_do_arquivo(lista_musicas, "arquivos/musicas.txt");
 
 //-----> O RESTO DA MAIN <-----//
     while(condicao){
@@ -58,7 +59,7 @@ int main(int argc, char** argv){
         {
         case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
             printf("\n OPÇÃO SELECIONADA: ADICIONAR NOVO ENTREVISTADO");
-            inserir_pessoa(d, lista_musicas);
+            inserir_pessoa(d, le_pessoa(lista_musicas));
 
             //atualiza_musicas(d, musicas);
             
@@ -67,11 +68,7 @@ int main(int argc, char** argv){
         case 1: 
             printf("\n OPÇÃO SELECIONADA: LISTAR MÚSICAS MAIS POPULARES");
             
-            separar_favoritas(lista_musicas, lista_musicas_populares);
-            int tam = tamanhoListaMusica(lista_musicas_populares);
-            printf("\n tamanho: %d", tam);
-            
-            shellSortListaMusica(lista_musicas_populares);
+            separar_populares(lista_musicas, lista_musicas_populares);
             //listar_musicas(lista_musicas_populares);
 
             atualiza_musicas(d, lista_musicas);
@@ -97,14 +94,14 @@ int main(int argc, char** argv){
 
             lt();
 
-            salvarPessoasNoArquivo(d);
-            salvarMusicasArquivo(lista_musicas, "arquivos/musicas.txt");
-            salvarMusicasArquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
+            salvar_pessoas_no_arquivo(d);
+            salvar_musicas_no_arquivo(lista_musicas, "arquivos/musicas.txt");
+            salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
 
-            salvarCategoria(homens_abaixo, 1);
-            salvarCategoria(homens_acima, 2);
-            salvarCategoria(mulheres_abaixo, 3);
-            salvarCategoria(mulheres_acima, 4);
+            salvar_categoria(homens_abaixo, 1);
+            salvar_categoria(homens_acima, 2);
+            salvar_categoria(mulheres_abaixo, 3);
+            salvar_categoria(mulheres_acima, 4);
             
             printf("\n PROGRAMA ENCERRADO!");
 
