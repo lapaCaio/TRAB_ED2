@@ -66,6 +66,8 @@ void inicializar_musicas(Musicas* m);
 //imprime uma lista de todas as músicas
 void listar_musicas(Musicas* m);
 
+int esta_ordenada(Musicas* m);
+
 //separa as músicas favoritas de uma lista para outra
 void separar_populares(Musicas* entrada, Musicas* saida);
 

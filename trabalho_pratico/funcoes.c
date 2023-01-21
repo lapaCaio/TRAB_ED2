@@ -30,7 +30,7 @@ void lt(){  //LIMPA TERMINAL
     system("clear"); 
 }
 void linha(){
-    printf("\n|------------------------------------------------------------------------------------------|");  
+    printf("\n|-----------------------------------------------|");  
 }
 
 void atualiza_id_global(){
@@ -141,8 +141,6 @@ void inicializar_musicas(Musicas* m){
     for(int i = 0; i < N; i++){
         m[i].id = i + 1;
         m[i].vezes_selecionadas = 0;
-        strcpy(m[i].nome, "vazio");
-        strcpy(m[i].autor, "vazio");
     }
 }
 
@@ -150,13 +148,38 @@ void listar_musicas(Musicas* m){  //OK
     //lt();
     printf("\n TODAS AS MÚSICAS:");
 
-    for(int i = 0; i < N; i++){
-        printf("\n [%d] %s - %s - %d", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
+    if(esta_ordenada(m)){
+        for(int i = 0; i < N; i++){
+            if(m[i].vezes_selecionadas == 0){
+                continue;
+            }else{
+                printf("\n [%d] %s - %s - %d", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
+            }        
+        }
+    }else{
+        for(int i = 0; i < N; i++){
+            printf("\n [%d] %s - %s - %d", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
+        }
     }
+
+    
+}
+
+int esta_ordenada(Musicas* m){
+    int i = 0;
+    int j = 1;
+
+    while(i < N){
+        if(m[i].id != j){
+            return 1;
+        }
+        i++;
+        j++;
+    }
+    return 0;
 }
 
 void separar_populares(Musicas* entrada, Musicas* saida){
-    inicializar_musicas(saida);
     int j = 0;
     for(int i = 0; i < N; i++){
         if(entrada[i].vezes_selecionadas > 0){
@@ -189,6 +212,8 @@ void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor
     }
 }
 
+
+
 void imprime_categoria(Descritor* d){  //ADICIONAR DETALHES SOBRE A CATEGORIA QUE ESTÁ SENDO IMPRIMIDA NA TELA
     if(!lista_vazia(d)){
         for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
@@ -202,7 +227,6 @@ void imprime_categoria(Descritor* d){  //ADICIONAR DETALHES SOBRE A CATEGORIA QU
 void atualiza_musicas(Descritor* d,  Musicas* m){
     //reinicia o valor das vezes_selecionadas para zero
     inicializar_musicas(m);
-
     //coletando as informações das músicas a partir da lista total de pessoas
     for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
         for(int i = 0; i < 5; i++){

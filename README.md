@@ -9,7 +9,7 @@ para um programa que deverá computar os seguintes resultados:
 
 1 – Uma lista de músicas em ordem de sua popularidade. Cada entrada da lista deve consistir do
 número da música (1 a N) e o número de vezes que ela foi mencionada na pesquisa. Músicas que
-nunca foram mencionadas não devem fazer parte da lista.  - SÓ FALTA O SHELLSORT
+nunca foram mencionadas não devem fazer parte da lista.  
 
 2 – Quatro listas separadas com o nome e o sobrenome de todos os pesquisados que tenham
 mencionado em primeiro lugar uma das três músicas mais populares na categoria.

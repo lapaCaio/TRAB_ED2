@@ -49,7 +49,7 @@ void salvar_pessoas_no_arquivo(Descritor* d){
 
 //-------------------------------------------------------------------------------------------------------------------------------
 
-void salvar_categoria(Descritor* d, int i){
+void salvar_categoria(Descritor* d, Musicas* m, int i){
     char* nome_arquivo;
     if(!lista_vazia(d)){
         if(i == 1){
@@ -73,7 +73,11 @@ void salvar_categoria(Descritor* d, int i){
         }
 
         for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
-            fprintf(arquivo_txt, "%s\t%s\t\n", np->pessoa.nome, np->pessoa.sobrenome);
+            for(int i = 0; i < 3; i++){
+                if(np->pessoa.musicas[0] == m[i].id){
+                    fprintf(arquivo_txt, "%s\t%s\t\n", np->pessoa.nome, np->pessoa.sobrenome);
+                }
+            }
         }
 
         fclose(arquivo_txt);
@@ -92,8 +96,6 @@ void ler_musicas_do_arquivo(Musicas* m, char* nomeArquivo){
     int i = 0;
     while(fscanf(arquivo, "%d\t%[^\t]\t%[^\t]\t%d\n", &nova_musica.id, nova_musica.nome, nova_musica.autor, &nova_musica.vezes_selecionadas) != EOF){
         m[i] = nova_musica;
-        //printf("\n > [%d] %s - %s: %d", nova_musica.id, nova_musica.nome, nova_musica.autor, nova_musica.vezes_selecionadas);
-        //printf("\n > [%d] %s - %s: %d", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
         i++;
     }
     fclose(arquivo);
@@ -105,9 +107,19 @@ void salvar_musicas_no_arquivo(Musicas* m, char* nomeArquivo){
         printf("ERRO AO ABRIR O ARQUIVO\n");
         return;
     }
-    for(int i = 0; i < N; i++){
-        //printf("\n %d %s %s %d", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
-        fprintf(arquivo, "%d\t%s\t%s\t%d\n", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
+
+    if(esta_ordenada(m)){
+        for(int i = 0; i < N; i++){
+            if(m[i].vezes_selecionadas == 0){
+                continue;
+            }else{
+                fprintf(arquivo, "%d\t%s\t%s\t%d\n", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
+            }        
+        }
+    }else{
+        for(int i = 0; i < N; i++){
+            fprintf(arquivo, "%d\t%s\t%s\t%d\n", m[i].id, m[i].nome, m[i].autor, m[i].vezes_selecionadas);
+        }
     }
 
     fclose(arquivo);
