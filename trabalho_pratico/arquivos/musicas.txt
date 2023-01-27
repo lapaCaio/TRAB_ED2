@@ -1,8 +1,8 @@
-1	Master Of Puppets	Metallica	4
-2	Maura	Manoel Gomes	6
-3	Paint It Black	The Rolling Stones	6
-4	Shape Of My Heart	Sting	9
-5	Bohemian Rhapsody	Queen	9
+1	Master Of Puppets	Metallica	5
+2	Maura	Manoel Gomes	7
+3	Paint It Black	The Rolling Stones	7
+4	Shape Of My Heart	Sting	10
+5	Bohemian Rhapsody	Queen	10
 6	The Real Slim Shady	Eminem	7
 7	Garçon	Reginaldo Rossi	4
 8	Dream On	Aerosmith	4
@@ -11,20 +11,20 @@
 11	Aint No Rest For The Wicked	Cage The Elephant	1
 12	House Of The Rising Sun	The Animals	0
 13	Decida	Milionário e José Rico	0
-14	Milu	Gusttavo Lima	0
+14	Milu	Gusttavo Lima	1
 15	Amor Hospitalar	Luckhaos	0
 16	Riptide	Vance Joy	0
 17	Sunflower	Rex Orange County	0
-18	Robocop Gay	Mamonas Assassinas	0
+18	Robocop Gay	Mamonas Assassinas	1
 19	Nothing Else Matters	Apocalyptica	0
 20	Sakura	Young Lixo	0
 21	Eu Kimetsu No Seu Rayba	MC Maha	0
-22	Trepada Em Cuiabá	Leno Brega	0
+22	Trepada Em Cuiabá	Leno Brega	1
 23	Nave Espacial	Samantha Machado	0
 24	Big Weenie	Eminem	0
 25	2345MEIA78	Gabriel Pensador	0
 26	Coração De Gelo	WIU	1
 27	Piseiro Do Rock Lee	MC Maha	1
 28	Menina Veneno	Ritchie	1
-29	Boate Azul	Cachorrão Do Brega	1
-30	Take What You Want	Post Malone	1
+29	Boate Azul	Cachorrão Do Brega	2
+30	Take What You Want	Post Malone	2

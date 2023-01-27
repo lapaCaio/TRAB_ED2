@@ -44,32 +44,101 @@ Pessoa le_pessoa(Musicas* m){  //OK
 
     nova_pessoa.id = id_global;
     atualiza_id_global();
-
-    printf("\n NOME: ");
-    scanf("%[^\n]", nova_pessoa.nome);
-    lb();
-
-    printf("\n SOBRENOME: ");
-    scanf("%[^\n]", nova_pessoa.sobrenome);
-    lb();
-
-    printf("\n IDADE: ");
-    scanf("%d", &nova_pessoa.idade);
-    lb();
-
-    printf("\n SEXO: ");
-    printf("\n\t [0] > MASCULINO");
-    printf("\n\t [1] > FEMININO");
-    printf("\n >>> ");
-    scanf("%d", &nova_pessoa.sexo);
-    lb();
     
-    linha();
-    listar_musicas(m);
-    linha();
-    printf("\n Digite o código das músicas separadas por espaço (Ex.: 12 3 22 8 7).");
-    printf("\n >>> ");
-    scanf("%d %d %d %d %d", &nova_pessoa.musicas[0], &nova_pessoa.musicas[1], &nova_pessoa.musicas[2], &nova_pessoa.musicas[3], &nova_pessoa.musicas[4]);
+    bool condicao = true;
+    while(condicao){
+        lb();
+        printf("\n NOME: ");
+        scanf("%[^\n]", nova_pessoa.nome);
+        lb();
+        //verifica se o nome foi digitado
+        if(strlen(nova_pessoa.nome) == 0){
+            printf("\n ERRO: O NOME NÃO PODE SER VAZIO. \n");
+            linha();
+        }else{
+            condicao = false;
+        }
+    }
+    
+    condicao = true;
+    while(condicao){
+        lb();
+        printf("\n SOBRENOME: ");
+        scanf("%[^\n]", nova_pessoa.sobrenome);
+        lb();
+        //verifica se o sobrenome foi digitado
+        if(strlen(nova_pessoa.sobrenome) == 0){
+            printf("\n ERRO: O SOBRENOME NÃO PODE SER VAZIO. \n");
+            linha();
+        }else{
+            condicao = false;
+        }
+    }
+    
+    condicao = true;
+    while(condicao){
+        printf("\n IDADE: ");
+        scanf("%d", &nova_pessoa.idade);
+        lb();
+        //verifica se a idade é um número inteiro positivo e está dentro do intervalo esperado
+        if(nova_pessoa.idade <= 0 || nova_pessoa.idade > 110){
+            printf("\n ERRO: A IDADE DEVE SER UM NÚMERO INTEIRO DE 0 A 110. \n");
+        }else{
+            condicao = false;
+        }
+    }
+    
+    condicao = true;
+    while(condicao){
+        printf("\n SEXO: ");
+        printf("\n\t [0] > MASCULINO");
+        printf("\n\t [1] > FEMININO");
+        printf("\n >>> ");
+        scanf("%d", &nova_pessoa.sexo);
+        lb();
+        //verifica se o sexo é 0 (masculino) ou 1 (feminino)
+        if(nova_pessoa.sexo != 0 && nova_pessoa.sexo != 1){
+            printf("\n ERRO: O SEXO DEVE SER 0 (MASCULINO) OU 1 (FEMININO).\n");
+        }else{
+            condicao = false;
+        }
+    }
+    
+    condicao = true;
+    while(condicao){
+        linha();
+        listar_musicas(m);
+        linha();
+        printf("\n Digite o código das músicas separadas por espaço (Ex.: 12 3 22 8 7).");
+        printf("\n >>> ");
+        scanf("%d %d %d %d %d", &nova_pessoa.musicas[0], &nova_pessoa.musicas[1], &nova_pessoa.musicas[2], &nova_pessoa.musicas[3], &nova_pessoa.musicas[4]);
+
+        //verifica se os códigos das músicas existem na lista de músicas fornecida
+        for(int i=0; i<5; i++){
+            int existe = 0;
+            for(int j = 0; j < N; j++){
+                if(nova_pessoa.musicas[i] == m[j].id){
+                    existe = 1;
+                }
+            }
+            if(!existe){
+                printf("\n ERRO: UM DOS CODIGOS INFORMADOS NAO EXISTE. \n", nova_pessoa.musicas[i]);
+                continue;
+            }else{
+                condicao = false;
+            }
+        }
+        //verifica se não há códigos de músicas duplicados
+        for(int i = 0; i < 5; i++){
+            for(int j = i+1; j < 5; j++){
+                if(nova_pessoa.musicas[i] == nova_pessoa.musicas[j]){
+                    printf("\n ERRO: O CÓDIGO DE MÚSICA %d FOI DIGITADO MAIS DE UMA VEZ. \n", nova_pessoa.musicas[i]);
+                }else{
+                    condicao = false;
+                }
+            }
+        }
+    }
 
     if(nova_pessoa.sexo == 0){  //o 1 representa o sexo feminino
         if(nova_pessoa.idade <= 20){
@@ -238,6 +307,47 @@ void atualiza_musicas(Descritor* d,  Musicas* m){
         }
     }
 }
+
+void shellsort(Musicas *m) {
+    int i, j, h;
+    Musicas auxiliar;
+
+    h = 1;
+
+    while (h < N){
+        h = h*3+1;
+    }
+        
+    while ( h > 1 ) {
+        h = (h-1)/3;
+        for ( i = h; i < N; i++ ) {
+            auxiliar = m[i];
+            j = i-h;
+            while  ( j >= 0 && auxiliar.vezes_selecionadas > m[j].vezes_selecionadas ) {
+                m[j+h] = m[j];
+                j = j - h;
+            }
+            if ( j != (i-h)){
+                m[j+h] = auxiliar;
+            }       
+        }
+    }
+}
+
+void libera_NoPessoa(NoPessoa* np) {
+    if(np != NULL) {
+        libera_NoPessoa(np->proximo);
+        free(np);
+    }
+}
+
+void libera_Descritor(Descritor* d) {
+    if(d != NULL) {
+        libera_NoPessoa(d->inicio);
+        free(d);
+    }
+}
+
 
 
 

@@ -66,6 +66,7 @@ void inicializar_musicas(Musicas* m);
 //imprime uma lista de todas as músicas
 void listar_musicas(Musicas* m);
 
+//verifica se a lista de musicas já passou pelo shellsort, ou seja, está ordenada
 int esta_ordenada(Musicas* m);
 
 //separa as músicas favoritas de uma lista para outra
@@ -80,5 +81,13 @@ void imprime_categoria(Descritor* d);
 //atualiza as informações das listas de músicas
 void atualiza_musicas(Descritor* d,  Musicas* m);
 
+//algoritmo de ordenação por diminuição de incremento
+void shellsort(Musicas* m);
+
+//libera o espaço alocado para os NoPessoa usando o free()
+void libera_NoPessoa(NoPessoa* np);
+
+//libera o espaço alocado para Descritor
+void libera_Descritor(Descritor* d);
 
 #endif  //FUNCS

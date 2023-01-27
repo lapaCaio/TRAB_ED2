@@ -19,3 +19,4 @@ diminuição de incremento (Shellsort).
 
 Obs: No programa deverá ser implementado também uma módulo que grave no arquivo os
 resultados da pesquisa.
+

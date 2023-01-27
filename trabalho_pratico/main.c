@@ -9,32 +9,6 @@
 
 #define N 30
 
-void shellsort(Musicas *m, int tamanho ) {
-    int i, j, h;
-    Musicas auxiliar;
-
-    h = 1;
-
-    while (h < tamanho){
-        h = h*3+1;
-    }
-        
-    while ( h > 1 ) {
-        h = (h-1)/3;
-        for ( i = h; i < tamanho; i++ ) {
-            auxiliar = m[i];
-            j = i-h;
-            while  ( j >= 0 && auxiliar.vezes_selecionadas > m[j].vezes_selecionadas ) {
-                m[j+h] = m[j];
-                j = j - h;
-            }
-            if ( j != (i-h)) 
-                m[j+h] = auxiliar;
-        }
-
-    }
-}
-
 int main(int argc, char** argv){
     setlocale(LC_ALL, "portuguese");
 
@@ -109,9 +83,11 @@ int main(int argc, char** argv){
         {
         case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
             printf("\n OPÇÃO SELECIONADA: ADICIONAR NOVO ENTREVISTADO");
+            linha();
 
             inserir_pessoa(d, le_pessoa(lista_musicas));
             salvar_pessoas_no_arquivo(d);
+            atualiza_musicas(d, lista_musicas);
             
             break;
 
@@ -120,7 +96,10 @@ int main(int argc, char** argv){
             linha();
 
             atualiza_musicas(d, lista_musicas_populares);
-            shellsort(lista_musicas_populares, N);
+            shellsort(lista_musicas_populares);
+            printf("\n DEPOIS DO SHELLSORT");
+            listar_musicas(lista_musicas_populares);
+
             salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
 
             listar_musicas(lista_musicas_populares);
@@ -142,10 +121,10 @@ int main(int argc, char** argv){
             atualiza_musicas(mulheres_acima, lista_mulheres_acima);
 
             //coloca as mais populares no inicio da lista
-            shellsort(lista_homens_abaixo, N);
-            shellsort(lista_homens_acima, N);
-            shellsort(lista_mulheres_abaixo, N);
-            shellsort(lista_mulheres_acima, N);
+            shellsort(lista_homens_abaixo);
+            shellsort(lista_homens_acima);
+            shellsort(lista_mulheres_abaixo);
+            shellsort(lista_mulheres_acima);
 
             //salva as pessoas em seu respectivo arquivo
             salvar_categoria(homens_abaixo, lista_homens_abaixo, 1);
@@ -158,18 +137,26 @@ int main(int argc, char** argv){
             printf("\n HOMENS ABAIXO DE 20 ANOS DE IDADE: ");
             imprime_categoria(homens_abaixo);
             linha();
+            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
+            listar_musicas(lista_homens_abaixo);
             
             printf("\n HOMENS ACIMA DE 20 ANOS DE IDADE: ");
             imprime_categoria(homens_acima);
             linha();
+            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
+            listar_musicas(lista_homens_acima);
             
             printf("\n MULHERES ABAIXO DE 20 ANOS DE IDADE: ");
             imprime_categoria(mulheres_abaixo);
             linha();
+            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
+            listar_musicas(lista_mulheres_abaixo);
             
             printf("\n MULHERES ACIMA DE 20 ANOS DE IDADE: ");
             imprime_categoria(mulheres_acima);
             linha();
+            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
+            listar_musicas(lista_mulheres_acima);
 
             break;
         
@@ -178,13 +165,35 @@ int main(int argc, char** argv){
             lt();
 
             salvar_pessoas_no_arquivo(d);
-            salvar_musicas_no_arquivo(lista_musicas, "arquivos/musicas.txt");
+            //salvar_musicas_no_arquivo(lista_musicas, "arquivos/musicas.txt");
 
-            listar_musicas(lista_musicas_populares);
+            shellsort(lista_musicas_populares);
+
             salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
-            
-            printf("\n PROGRAMA ENCERRADO!");
 
+            //separar as pessoas em suas categorias
+            separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
+            
+            //atualizar a lista de cada música
+            atualiza_musicas(homens_abaixo, lista_homens_abaixo);
+            atualiza_musicas(homens_acima, lista_homens_acima);
+            atualiza_musicas(mulheres_abaixo, lista_mulheres_abaixo);
+            atualiza_musicas(mulheres_acima, lista_mulheres_acima);
+
+            //coloca as mais populares no inicio da lista
+            shellsort(lista_homens_abaixo);
+            shellsort(lista_homens_acima);
+            shellsort(lista_mulheres_abaixo);
+            shellsort(lista_mulheres_acima);
+
+            //salva as pessoas em seu respectivo arquivo
+            salvar_categoria(homens_abaixo, lista_homens_abaixo, 1);
+            salvar_categoria(homens_acima, lista_homens_acima, 2);
+            salvar_categoria(mulheres_abaixo, lista_mulheres_abaixo, 3);
+            salvar_categoria(mulheres_acima, lista_mulheres_acima, 4);
+            
+            linha();
+            printf("\n PROGRAMA ENCERRADO!");
             linha();
 
             condicao = false;
