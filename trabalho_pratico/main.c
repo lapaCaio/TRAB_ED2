@@ -64,16 +64,39 @@ int main(int argc, char** argv){
     ler_musicas_do_arquivo(lista_musicas, "arquivos/musicas.txt");
     ler_musicas_do_arquivo(lista_musicas_populares, "arquivos/musicas.txt");
 
+    separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
+
+    atualiza_musicas(homens_abaixo, lista_homens_abaixo);
+    atualiza_musicas(homens_acima, lista_homens_acima);
+    atualiza_musicas(homens_acima, lista_homens_acima);
+    atualiza_musicas(mulheres_abaixo, lista_mulheres_abaixo);
+    atualiza_musicas(mulheres_acima, lista_mulheres_acima);
+
+    shellsort(lista_homens_abaixo);
+    shellsort(lista_homens_acima);
+    shellsort(lista_mulheres_abaixo);
+    shellsort(lista_mulheres_acima);
+
+    salvar_categoria(homens_abaixo, lista_homens_abaixo, 1);
+    salvar_categoria(homens_acima, lista_homens_acima, 2);
+    salvar_categoria(mulheres_abaixo, lista_mulheres_abaixo, 3);
+    salvar_categoria(mulheres_acima, lista_mulheres_acima, 4);
+    
+
+    //listar_musicas(lista_musicas_populares);
+
     while(condicao){
         escolha = 0;
 
         linha();
-        printf("\n ESCOLHA A OPÇÃO DESEJADA: ");
+        printf("\n ESCOLHA A OPCAO DESEJADA: ");
         linha();
-        printf("\n 0 - ADICIONAR NOVO ENTREVISTADO");
-        printf("\n 1 - LISTAR MÚSICAS MAIS POPULARES");
-        printf("\n 2 - LISTAR ENTREVISTADOS POR CATEGORIA");
-        printf("\n 3 - SAIR");
+        printf("\n [1] - ADICIONAR NOVO ENTREVISTADO");
+        printf("\n [2] - LISTAR MUSICAS MAIS POPULARES");
+        printf("\n [3] - LISTAR ENTREVISTADOS POR CATEGORIA");
+        printf("\n [4] - LISTAR TODAS AS MUSICAS");
+        printf("\n [5] - LISTAR TODAS AS PESSOAS");
+        printf("\n [0] - SAIR");
         linha();
         printf("\n >>> ");
         scanf("%d", &escolha);
@@ -81,132 +104,207 @@ int main(int argc, char** argv){
 
         switch (escolha)
         {
-        case 0:  //INSERE UMA PESSOA(ENTREVISTADO)
-            printf("\n OPÇÃO SELECIONADA: ADICIONAR NOVO ENTREVISTADO");
-            linha();
-
-            inserir_pessoa(d, le_pessoa(lista_musicas));
-            salvar_pessoas_no_arquivo(d);
-            atualiza_musicas(d, lista_musicas);
-            
-            break;
-
-        case 1: 
-            printf("\n OPÇÃO SELECIONADA: LISTAR MÚSICAS MAIS POPULARES");
-            linha();
-
-            atualiza_musicas(d, lista_musicas_populares);
-            shellsort(lista_musicas_populares);
-            printf("\n DEPOIS DO SHELLSORT");
-            listar_musicas(lista_musicas_populares);
-
-            salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
-
-            listar_musicas(lista_musicas_populares);
-            atualiza_musicas(d, lista_musicas);
-
-            break;
-
-        case 2:  
-                
-            printf("\n OPÇÃO SELECIONADA: LISTAR ENTREVISTADOS POR CATEGORIA");
-
-            //separar as pessoas em suas categorias
-            separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
-            
-            //atualizar a lista de cada música
-            atualiza_musicas(homens_abaixo, lista_homens_abaixo);
-            atualiza_musicas(homens_acima, lista_homens_acima);
-            atualiza_musicas(mulheres_abaixo, lista_mulheres_abaixo);
-            atualiza_musicas(mulheres_acima, lista_mulheres_acima);
-
-            //coloca as mais populares no inicio da lista
-            shellsort(lista_homens_abaixo);
-            shellsort(lista_homens_acima);
-            shellsort(lista_mulheres_abaixo);
-            shellsort(lista_mulheres_acima);
-
-            //salva as pessoas em seu respectivo arquivo
-            salvar_categoria(homens_abaixo, lista_homens_abaixo, 1);
-            salvar_categoria(homens_acima, lista_homens_acima, 2);
-            salvar_categoria(mulheres_abaixo, lista_mulheres_abaixo, 3);
-            salvar_categoria(mulheres_acima, lista_mulheres_acima, 4);
-
-
-            
-            printf("\n HOMENS ABAIXO DE 20 ANOS DE IDADE: ");
-            imprime_categoria(homens_abaixo);
-            linha();
-            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
-            listar_musicas(lista_homens_abaixo);
-            
-            printf("\n HOMENS ACIMA DE 20 ANOS DE IDADE: ");
-            imprime_categoria(homens_acima);
-            linha();
-            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
-            listar_musicas(lista_homens_acima);
-            
-            printf("\n MULHERES ABAIXO DE 20 ANOS DE IDADE: ");
-            imprime_categoria(mulheres_abaixo);
-            linha();
-            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
-            listar_musicas(lista_mulheres_abaixo);
-            
-            printf("\n MULHERES ACIMA DE 20 ANOS DE IDADE: ");
-            imprime_categoria(mulheres_acima);
-            linha();
-            printf("\n   MUSICAS MAIS POPULARES DA CATEGORIA:");
-            listar_musicas(lista_mulheres_acima);
-
-            break;
-        
-        case 3:
-
+        case 0:  
             lt();
 
             salvar_pessoas_no_arquivo(d);
-            //salvar_musicas_no_arquivo(lista_musicas, "arquivos/musicas.txt");
 
             shellsort(lista_musicas_populares);
 
             salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
 
-            //separar as pessoas em suas categorias
-            separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
+            atualiza_musicas(d, lista_musicas);
+            salvar_musicas_no_arquivo(lista_musicas, "arquivos/musicas.txt");
             
-            //atualizar a lista de cada música
-            atualiza_musicas(homens_abaixo, lista_homens_abaixo);
-            atualiza_musicas(homens_acima, lista_homens_acima);
-            atualiza_musicas(mulheres_abaixo, lista_mulheres_abaixo);
-            atualiza_musicas(mulheres_acima, lista_mulheres_acima);
 
-            //coloca as mais populares no inicio da lista
-            shellsort(lista_homens_abaixo);
-            shellsort(lista_homens_acima);
-            shellsort(lista_mulheres_abaixo);
-            shellsort(lista_mulheres_acima);
+            libera_Descritor(d);
 
-            //salva as pessoas em seu respectivo arquivo
-            salvar_categoria(homens_abaixo, lista_homens_abaixo, 1);
-            salvar_categoria(homens_acima, lista_homens_acima, 2);
-            salvar_categoria(mulheres_abaixo, lista_mulheres_abaixo, 3);
-            salvar_categoria(mulheres_acima, lista_mulheres_acima, 4);
-            
+            libera_Descritor(homens_abaixo);
+            libera_Descritor(homens_acima);
+
+            libera_Descritor(mulheres_abaixo);
+            libera_Descritor(mulheres_acima);
+
             linha();
             printf("\n PROGRAMA ENCERRADO!");
             linha();
 
             condicao = false;
+            
+            break;
+
+        case 1: 
+        //INSERE UMA PESSOA(ENTREVISTADO)
+            printf("\n OPCAO SELECIONADA:\n ADICIONAR NOVO ENTREVISTADO");
+            linha();
+
+            inserir_pessoa(d, le_pessoa(lista_musicas));
+            salvar_pessoas_no_arquivo(d);
+            atualiza_musicas(d, lista_musicas);
+
+            separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
+
+            listar_pessoas(homens_acima);
+            linha();
+            linha();
+            separa_categorias(d, homens_abaixo, homens_acima, mulheres_abaixo, mulheres_acima);
+            listar_pessoas(homens_acima);
+
+            atualiza_musicas(homens_abaixo, lista_homens_abaixo);
+            atualiza_musicas(homens_acima, lista_homens_acima);
+            atualiza_musicas(mulheres_abaixo, lista_mulheres_abaixo);
+            atualiza_musicas(mulheres_acima, lista_mulheres_acima);
+
+    
+            shellsort(lista_homens_abaixo);
+            shellsort(lista_homens_acima);
+            shellsort(lista_mulheres_abaixo);
+            shellsort(lista_mulheres_acima);
+
+            salvar_categoria(homens_abaixo, lista_homens_abaixo, 1);
+            salvar_categoria(homens_acima, lista_homens_acima, 2);
+            salvar_categoria(mulheres_abaixo, lista_mulheres_abaixo, 3);
+            salvar_categoria(mulheres_acima, lista_mulheres_acima, 4);
 
             break;
 
+        case 2:  
+            printf("\n OPCAO SELECIONADA:\n LISTAR MÚSICAS MAIS POPULARES");
+            linha();
+
+            atualiza_musicas(d, lista_musicas_populares);
+            shellsort(lista_musicas_populares);
+
+            salvar_musicas_no_arquivo(lista_musicas_populares, "arquivos/musicas_populares.txt");
+            listar_musicas(lista_musicas_populares);
+            atualiza_musicas(d, lista_musicas);
+
+            break;
+        
+        case 3:
+            lt();
+            printf("\n OPCAO SELECIONADA:\n LISTAR ENTREVISTADOS POR CATEGORIA");
+
+            // printf("\nteste");
+            // listar_musicas(lista_homens_acima);
+
+
+            bool sub_condicao = true;
+            int sub_escolha;
+
+            while(sub_condicao){
+                sub_escolha = 0;
+
+                linha();
+                printf("\n ESCOLHA EM QUAL CATEGORIA DESEJA MOSTRAR \n AS PESSOAS E SUAS MUSICAS FAVORITAS: ");
+                linha();
+                printf("\n [1] - HOMENS ABAIXO DE 20 ANOS");
+                printf("\n [2] - HOMENS ACIMA DE 20 ANOS");
+                printf("\n [3] - MULHERES ABAIXO DE 20 ANOS");
+                printf("\n [4] - MULHERES ACIMA DE 20 ANOS");
+                printf("\n [0] - VOLTAR");
+                linha();
+                printf("\n >>> ");
+                scanf("%d", &sub_escolha);
+                lb();
+                lt();
+
+                switch (sub_escolha)
+                {
+                    case 0:
+                        sub_condicao = false;
+                        break;
+                    case 1:
+
+                        printf("\n HOMENS ABAIXO DE 20 ANOS DE IDADE: ");
+                        imprime_categoria(homens_abaixo);
+                        linha();
+                        printf("\n MUSICAS MAIS POPULARES DA CATEGORIA:");
+                        if(esta_ordenada(lista_homens_abaixo)){
+                            listar_musicas(lista_homens_abaixo);
+                        }else{
+                            printf("\n A LISTA DE MASICAS ESTA VAZIA!");
+                        }
+
+                        break;
+                    case 2:
+
+                        printf("\n HOMENS ACIMA DE 20 ANOS DE IDADE: ");
+                        imprime_categoria(homens_acima);
+                        linha();
+                        printf("\n MUSICAS MAIS POPULARES DA CATEGORIA:");
+                        if(esta_ordenada(lista_homens_acima)){
+                            listar_musicas(lista_homens_acima);
+                        }else{
+                            printf("\n A LISTA DE MUSICAS ESTA VAZIA!");
+                        }
+                        
+                        break;
+                    case 3:
+
+                        printf("\n MULHERES ABAIXO DE 20 ANOS DE IDADE: ");
+                        imprime_categoria(mulheres_abaixo);
+                        linha();
+                        printf("\n MUSICAS MAIS POPULARES DA CATEGORIA:");
+                        if(esta_ordenada(lista_mulheres_abaixo)){
+                            listar_musicas(lista_mulheres_abaixo);
+                        }else{
+                            printf("\n A LISTA DE MUSICAS ESTA VAZIA!");
+                        }       
+                        break;
+                    case 4:
+
+                        printf("\n MULHERES ACIMA DE 20 ANOS DE IDADE: ");
+                        imprime_categoria(mulheres_acima);
+                        linha();
+                        printf("\n MUSICAS MAIS POPULARES DA CATEGORIA:");
+                        if(esta_ordenada(lista_mulheres_acima)){
+                            listar_musicas(lista_mulheres_acima);
+                        }else{
+                            printf("\n A LISTA DE MUSICAS ESTÁ VAZIA!");
+                        } 
+
+                        break;
+                    default:
+
+                        lb();
+                        lt();
+                        linha();
+                        printf("\n O VALOR QUE VOCÊ DIGITOU NAO CORRESPONDE A NENHUMA OPCAO,");
+                        printf("\n POR FAVOR DIGITE UM NUMERO ENTRE 0 E 4, CORRESPONDENDE COM A OPCAO QUE DESEJA!");
+                        linha();
+
+                        continue;
+                }
+            }
+
+            break;
+        case 4:
+
+            lt();
+            linha();
+            printf("\n OPCAO SELECIONADA: LISTAR TODAS AS MUSICAS");
+            linha();
+            atualiza_musicas(d, lista_musicas);
+            listar_musicas(lista_musicas);
+
+            break;
+        case 5:
+
+            lt();
+            linha();
+            printf("\n OPCAO SELECIONADA: LISTAR TODAS AS PESSOAS");
+            linha();
+            listar_pessoas(d);
+
+            break;
         default:
 
             lb();
             lt();
             linha();
-            printf("\n O VALOR QUE VOCÊ DIGITOU NÃO CORRESPONDE A NENHUMA OPÇÃO,");
-            printf("\n POR FAVOR DIGITE UM NÚMERO ENTRE 0 E 4, CORRESPONDENDE COM A OPÇÃO QUE DESEJA!");
+            printf("\n O VALOR QUE VOCÊ DIGITOU NÃO CORRESPONDE A NENHUMA OPCAO,");
+            printf("\n POR FAVOR DIGITE UM NUMERO ENTRE 0 E 4, CORRESPONDENDE COM A OPCAO QUE DESEJA!");
             linha();
 
             continue;

@@ -20,8 +20,6 @@ typedef struct nopessoa NoPessoa;
 
 typedef struct descritor Descritor;
 
-//----------> FUNÇÕES AUXILIARES <----------//
-
 void lb(){  //LIMPA BUFER
     setbuf(stdin, NULL);
 }
@@ -36,8 +34,6 @@ void linha(){
 void atualiza_id_global(){
     id_global++;
 }
-
-//----------> FUNÇÕES - TAD (PESSOA) <----------//
 
 Pessoa le_pessoa(Musicas* m){  //OK
     Pessoa nova_pessoa;
@@ -122,7 +118,7 @@ Pessoa le_pessoa(Musicas* m){  //OK
                 }
             }
             if(!existe){
-                printf("\n ERRO: UM DOS CODIGOS INFORMADOS NAO EXISTE. \n", nova_pessoa.musicas[i]);
+                printf("\n ERRO: UM DOS CODIGOS INFORMADOS NAO EXISTE. \n");
                 continue;
             }else{
                 condicao = false;
@@ -157,18 +153,16 @@ Pessoa le_pessoa(Musicas* m){  //OK
     return nova_pessoa;
 }
 
-//----------> FUNÇÕES - DUPLAMENTE ENCADEADA (LISTA DE ALUNOS) <----------//
-
-void inicializa_descritor(Descritor* d){  //OK
+void inicializa_descritor(Descritor* d){  
     d->tamanho = 0;
     d->inicio = d->final = NULL; 
 }
 
-int lista_vazia(Descritor* d){  //OK
+int lista_vazia(Descritor* d){  
     return (d->inicio == NULL && d->final == NULL);
 }
 
-void inserir_pessoa(Descritor* d, Pessoa p){  //OK
+void inserir_pessoa(Descritor* d, Pessoa p){  
     NoPessoa* novo_np = (NoPessoa*)malloc(sizeof(NoPessoa));
 
     novo_np->proximo = NULL;
@@ -184,7 +178,7 @@ void inserir_pessoa(Descritor* d, Pessoa p){  //OK
     }
 }
 
-void imprime_pessoas(Descritor* d){  //OK
+void imprime_pessoas(Descritor* d){  
     if(!lista_vazia(d)){
         for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
             printf("\n ID: %d", np->pessoa.id);
@@ -207,13 +201,15 @@ void imprime_pessoas(Descritor* d){  //OK
 }
 
 void inicializar_musicas(Musicas* m){
-    for(int i = 0; i < N; i++){
+    for (int i = 0; i < N; i++) {
         m[i].id = i + 1;
+        // strcpy(m[i].nome, "");
+        // strcpy(m[i].autor, "");
         m[i].vezes_selecionadas = 0;
     }
 }
 
-void listar_musicas(Musicas* m){  //OK
+void listar_musicas(Musicas* m){  
     //lt();
     printf("\n TODAS AS MÚSICAS:");
 
@@ -248,38 +244,35 @@ int esta_ordenada(Musicas* m){
     return 0;
 }
 
-void separar_populares(Musicas* entrada, Musicas* saida){
-    int j = 0;
-    for(int i = 0; i < N; i++){
-        if(entrada[i].vezes_selecionadas > 0){
-            saida[j] = entrada[i];
-            j++;
+void separa_categorias(Descritor* all, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4) {
+    //limpa as listas d1, d2, d3 e d4
+    limpa_lista(d1);
+    limpa_lista(d2);
+    limpa_lista(d3);
+    limpa_lista(d4);
+
+    NoPessoa* atual = all->inicio;
+    while (atual != NULL) {
+        //verifica o tipo da pessoa atual
+        int tipo = atual->pessoa.tipo;
+        //seleciona a lista de destino de acordo com o tipo
+        Descritor* destino;
+        switch (tipo) {
+            case 1: destino = d1; break;
+            case 2: destino = d2; break;
+            case 3: destino = d3; break;
+            case 4: destino = d4; break;
+            default: destino = NULL; break;
         }
+        //se a lista de destino foi selecionada, insere a pessoa na lista
+        if (destino != NULL) {
+            inserePessoa(destino, atual->pessoa);
+        }
+        //avança para o próximo nó da lista all
+        atual = atual->proximo;
     }
 }
 
-void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4){
-    if(lista_vazia(todos)){ 
-        printf("\n A LISTA DE ENTREVISTADOS ESTA VAZIA!");
-        return;
-    }
-    for(NoPessoa* np = todos->inicio; np != NULL; np = np->proximo){
-        Descritor* temp;
-        if(np->pessoa.tipo == 1){ //HOMEM ABAIXO
-            temp = d1;
-        }else if(np->pessoa.tipo == 2){  //HOMEM ACIMA
-            temp = d2;
-        }else if(np->pessoa.tipo == 3){  //MULHER ABAIXO
-            temp = d3;
-        }else if(np->pessoa.tipo == 4){  //MULHER ACIMA
-            temp = d4;
-        }else{
-            printf("\n ALGO DEU ERRADO!");
-            return;
-        }
-        inserir_pessoa(temp, np->pessoa);
-    }
-}
 
 
 
@@ -289,7 +282,7 @@ void imprime_categoria(Descritor* d){  //ADICIONAR DETALHES SOBRE A CATEGORIA QU
             printf("\nNOME: %s %s", np->pessoa.nome, np->pessoa.sobrenome);
         }    
     }else{
-        printf("\n A CATEGORIA ESTÁ VAZIA!");
+        printf("\n A CATEGORIA ESTA VAZIA!");
     }
 }
 
@@ -334,6 +327,48 @@ void shellsort(Musicas *m) {
     }
 }
 
+void listar_pessoas(Descritor* d){
+    for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
+        printf("\n ID: %d", np->pessoa.id);
+        printf("\n\tNOME COMPLETO: %s %s", np->pessoa.nome, np->pessoa.sobrenome);
+        printf("\n\tIDADE: %d", np->pessoa.idade);
+        if(np->pessoa.sexo == 0){
+            printf("\n\tSEXO: Masculino");
+        }else{
+            printf("\n\tSEXO: Feminino");
+        }
+        printf("\n\tMUSICAS: ");
+        for(int i = 0; i < 5; i++){
+            printf(" %d", np->pessoa.musicas[i]);
+        }
+    }
+}
+
+void limpa_lista(Descritor* d) {
+    NoPessoa* atual = d->inicio;
+    while (atual != NULL) {
+        NoPessoa* proximo = atual->proximo;
+        free(atual);
+        atual = proximo;
+    }
+    d->inicio = NULL;
+    d->final = NULL;
+    d->tamanho = 0;
+}
+
+void inserePessoa(Descritor* d, Pessoa p) {
+    NoPessoa* novoNo = (NoPessoa*) malloc(sizeof(NoPessoa));
+    novoNo->pessoa = p;
+    novoNo->proximo = NULL;
+    if (d->inicio == NULL) {
+        d->inicio = novoNo;
+    } else {
+        d->final->proximo = novoNo;
+    }
+    d->final = novoNo;
+    d->tamanho++;
+}
+
 void libera_NoPessoa(NoPessoa* np) {
     if(np != NULL) {
         libera_NoPessoa(np->proximo);
@@ -347,10 +382,3 @@ void libera_Descritor(Descritor* d) {
         free(d);
     }
 }
-
-
-
-
-
-
-

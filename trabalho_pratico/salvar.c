@@ -66,23 +66,24 @@ void salvar_categoria(Descritor* d, Musicas* m, int i){
         }
 
         FILE *arquivo_txt = fopen(nome_arquivo, "w");
-
+    
         if(arquivo_txt == NULL) {
             printf("ERRO AO ABRIR O ARQUIVO: %s\n",nome_arquivo);
             return;
         }
 
+        rewind(arquivo_txt);
+
         for(NoPessoa* np = d->inicio; np != NULL; np = np->proximo){
             for(int i = 0; i < 3; i++){
                 if(np->pessoa.musicas[0] == m[i].id){
                     fprintf(arquivo_txt, "%s\t%s\t\n", np->pessoa.nome, np->pessoa.sobrenome);
+                    i = 3;
                 }
             }
         }
 
         fclose(arquivo_txt);
-    }else{
-        printf("A LISTA ESTA VAZIA!\n");
     }
 }
 

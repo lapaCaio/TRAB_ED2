@@ -17,7 +17,7 @@ typedef struct pessoa {
     int idade;
     int sexo;
     int musicas[5];
-    char tipo;
+    int tipo;
 }Pessoa;
 
 //nó simples da lista de pessoas entrevistadas
@@ -45,7 +45,7 @@ void linha();
 //acrescenta +1 no id global
 void atualiza_id_global();
 
-// coleta todas as informações de uma pessoa entrevistada
+// coleta todas as informações de uma pessoa entrevistada e retorna um tipo Pessoa
 Pessoa le_pessoa(Musicas* m);
 
 //preenche o descritor com as informações básicas
@@ -66,11 +66,8 @@ void inicializar_musicas(Musicas* m);
 //imprime uma lista de todas as músicas
 void listar_musicas(Musicas* m);
 
-//verifica se a lista de musicas já passou pelo shellsort, ou seja, está ordenada
+//verifica se a lista de musicas já passou pelo shellsort, ou seja, está ordenada e retorna 1, caso contrario, retorna 0
 int esta_ordenada(Musicas* m);
-
-//separa as músicas favoritas de uma lista para outra
-void separar_populares(Musicas* entrada, Musicas* saida);
 
 //separa as pessoas em quatro categorias distintas
 void separa_categorias(Descritor* todos, Descritor* d1, Descritor* d2, Descritor* d3, Descritor* d4);
@@ -89,5 +86,15 @@ void libera_NoPessoa(NoPessoa* np);
 
 //libera o espaço alocado para Descritor
 void libera_Descritor(Descritor* d);
+
+//lista todas todas as pessoas
+void listar_pessoas(Descritor* d);
+
+//limpa a lista de pessoas, sem liberala completamente
+void limpa_lista(Descritor* d);
+
+//insere uma Pessoa p em um Descritor* d
+void inserePessoa(Descritor* d, Pessoa p);
+
 
 #endif  //FUNCS
